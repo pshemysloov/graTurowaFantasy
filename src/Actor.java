@@ -16,4 +16,13 @@ public abstract class Actor {
         this.shield = 0;
     }
 
+    public void takeDamage(int damage) {
+        this.health -= damage;
+        if (health <= 0) {
+            this.health = 0;
+            death();
+        }
+    }
+
+    public abstract void death();
 }

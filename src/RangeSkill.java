@@ -1,3 +1,6 @@
-public class RangeSkill extends Skill {
-    public void useSkill() {}
+public abstract class RangeSkill extends Skill {
+    public RangeSkill(String name, String description) {
+        super(name, description);
+    }
+
 }
