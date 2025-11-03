@@ -7,6 +7,18 @@ public abstract class Actor {
     int energy;
     int shield;
 
+    int actionValue;
+
+    public Actor(String name, int maxHealth, int maxEnergy,int actionValue) {
+        this.name = name;
+        this.maxHealth = maxHealth;
+        this.maxEnergy = maxEnergy;
+        this.health = maxHealth;
+        this.energy = maxEnergy;
+        this.shield = 0;
+        this.actionValue = actionValue;
+    }
+
     public Actor(String name, int maxHealth, int maxEnergy) {
         this.name = name;
         this.maxHealth = maxHealth;
