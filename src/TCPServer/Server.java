@@ -1,4 +1,4 @@
-package TCPServer;// java
+package TCPServer;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -19,7 +19,6 @@ public class Server {
             while (true) {
                 Socket socket = server.accept();
                 try {
-                    // create ObjectOutputStream first to avoid deadlock
                     ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
                     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
@@ -38,7 +37,6 @@ public class Server {
                             return session;
                         } else {
                             session.addPlayer(conn);
-                            // remove mapping so kolejni nie dołączą pod tym samym kodem
                             return null;
                         }
                     });

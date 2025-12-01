@@ -58,6 +58,7 @@ public class Session implements Runnable {
                     players[other].oos.writeObject(pkt);
                     players[other].oos.flush();
                     current = other;
+                    System.out.println("[TCPServer.Session " + code + "] " + pkt);
                 } else {
                     // ignoruj inne obiekty
                 }

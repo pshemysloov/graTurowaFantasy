@@ -13,14 +13,18 @@ public class Client {
 
     public static void main(String[] args) {
         AtomicBoolean started = new AtomicBoolean(false);
+        AtomicBoolean awaitingResponse = new AtomicBoolean(false);
+        AtomicBoolean myTurn = new AtomicBoolean(false);
+        final Object sendLock = new Object();
+
         try (BufferedReader console = new BufferedReader(new InputStreamReader(System.in))) {
             System.out.print("Nickname: ");
             String nickname = console.readLine().trim();
-            System.out.print("Kod 4-cyfrowy: ");
+            System.out.print("Kod sesji: ");
             String code = console.readLine().trim();
 
             Socket socket = new Socket(HOST, PORT);
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()); // ważne: najpierw OOS
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
             // wysyłamy kod sesji jako pierwszy obiekt
@@ -37,18 +41,35 @@ public class Client {
                             System.out.println("[SERWER] " + s);
                             if (s.startsWith("START:")) {
                                 started.set(true);
-                                System.out.println("[INFO] Rozpoczęto. " + (s.endsWith("0") ? "Jesteś graczem 0 (zaczyna)." : "Jesteś graczem 1."));
+                                boolean amPlayer0 = s.endsWith("0");
+                                myTurn.set(amPlayer0);
+                                System.out.println("[INFO] Rozpoczęto. " + (amPlayer0 ? "Jesteś graczem 0 (zaczyna)." : "Jesteś graczem 1."));
                             }
                         } else if (obj instanceof packet_TurnInfo) {
                             packet_TurnInfo pkt = (packet_TurnInfo) obj;
-                            System.out.println("[ODBIERZ] " + pkt);
+                            System.out.println("[ODEBRANO] " + pkt);
+
+                            // po otrzymaniu pakietu przeciwnika — teraz jest nasza tura
+                            synchronized (sendLock) {
+                                myTurn.set(true);
+                                if (awaitingResponse.get()) {
+                                    awaitingResponse.set(false);
+                                }
+                                sendLock.notifyAll();
+                            }
                         } else {
-                            System.out.println("[ODBIERZ] Nieznany obiekt: " + obj);
+                            System.out.println("[ODEBRANO] Nieznany obiekt: " + obj);
                         }
                     }
                 } catch (Exception e) {
                     System.out.println("[INFO] Połączenie zamknięte: " + e.getMessage());
                 } finally {
+                    // odblokuj ewentualnie czekający wątek przed zakończeniem
+                    synchronized (sendLock) {
+                        awaitingResponse.set(false);
+                        myTurn.set(false);
+                        sendLock.notifyAll();
+                    }
                     try { ois.close(); } catch (Exception ignored) {}
                     try { oos.close(); } catch (Exception ignored) {}
                     try { socket.close(); } catch (Exception ignored) {}
@@ -62,13 +83,33 @@ public class Client {
                 Thread.sleep(100);
             }
 
-            // po każdym wciśnięciu Enter wysyłaj pakiet
+            // po każdym wciśnięciu Enter wysyłaj pakiet, ale tylko jeśli jest nasza tura
             int a = 0, b = 0, c = 0;
             System.out.println("Naciśnij Enter aby wysłać pakiet (wpisz `quit` i Enter aby zakończyć).");
             while (true) {
                 String line = console.readLine();
                 if (line == null) break;
                 if ("quit".equalsIgnoreCase(line.trim())) break;
+
+                // jeśli nie jest nasza tura, ignoruj szybkie klikanie Enter
+                synchronized (sendLock) {
+                    if (!myTurn.get()) {
+                        System.out.println("[INFO] Nie twoja tura");
+                        continue;
+                    }
+                    // dodatkowo zabezpieczamy że mamy tylko jeden pakiet w locie
+                    while (awaitingResponse.get()) {
+                        try {
+                            sendLock.wait();
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                            break;
+                        }
+                    }
+                    // zaznaczamy, że wysyłamy i przekazujemy turę przeciwnikowi
+                    awaitingResponse.set(true);
+                    myTurn.set(false);
+                }
 
                 packet_TurnInfo pkt = new packet_TurnInfo(nickname, a++, b++, c++);
                 try {
@@ -77,6 +118,12 @@ public class Client {
                     System.out.println("[WYSŁANO] " + pkt);
                 } catch (Exception e) {
                     System.out.println("[BŁĄD] Nie można wysłać pakietu: " + e.getMessage());
+                    // upewnij się, że nie zostaniemy w stanie czekać bez końca
+                    synchronized (sendLock) {
+                        awaitingResponse.set(false);
+                        myTurn.set(true);
+                        sendLock.notifyAll();
+                    }
                     break;
                 }
             }
