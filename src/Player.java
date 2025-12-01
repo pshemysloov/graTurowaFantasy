@@ -1,4 +1,4 @@
-public class Player extends Actor{
+public class Player extends Actor {
     MeleeSkill meleeSkill;
     RangeSkill rangeSkill;
     SpecialSkill specialSkills[] = new SpecialSkill[4];
@@ -13,7 +13,9 @@ public class Player extends Actor{
     int agility;
     int constitution;
 
-    public Player(String name, int maxHealth, int maxEnergy, int experience, int attributePoints, int strength, int accuracy, int intelligence, int willpower, int agility, int constitution, int id_skill1, int id_skill2) {
+    public Player(String name, int maxHealth, int maxEnergy, int experience, int attributePoints,
+                  int strength, int accuracy, int intelligence, int willpower, int agility,
+                  int constitution, int id_skill1, int id_skill2) {
         super(name, maxHealth, maxEnergy);
         this.experience = experience;
         this.attributePoints = attributePoints;
@@ -25,14 +27,21 @@ public class Player extends Actor{
         this.agility = agility;
         this.constitution = constitution;
 
-        this.actionValue = agility*4;
+        this.actionValue = agility * 4;
 
-        // inicjalizacja umiejętności
-        specialSkills[0] = SpecialSkillRegister.getSkillById(id_skill1); // Heal
-        specialSkills[1] = SpecialSkillRegister.getSkillById(id_skill2); // Fireball
+        // Inicjalizacja umiejętności
+        this.meleeSkill = sk_SwordSlash.getInstance();
+        this.rangeSkill = sk_BowShot.getInstance();
+        this.specialSkills[0] = SpecialSkillRegister.getSkillById(id_skill1);
+        this.specialSkills[1] = SpecialSkillRegister.getSkillById(id_skill2);
     }
 
-    public void death(){
-        // handle death
+    @Override
+    public void death() {
+        GameLogger.log(name + " został pokonany!");
     }
+
+    public MeleeSkill getMeleeSkill() { return meleeSkill; }
+    public RangeSkill getRangeSkill() { return rangeSkill; }
+    public SpecialSkill[] getSpecialSkills() { return specialSkills; }
 }

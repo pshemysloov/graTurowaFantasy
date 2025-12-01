@@ -10,13 +10,8 @@ public enum SpecialSkillRegister {
         this.skill = skill;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public SpecialSkill getSkill() {
-        return skill;
-    }
+    public int getId() { return id; }
+    public SpecialSkill getSkill() { return skill; }
 
     public static SpecialSkill getSkillById(int id) {
         for (SpecialSkillRegister register : SpecialSkillRegister.values()) {

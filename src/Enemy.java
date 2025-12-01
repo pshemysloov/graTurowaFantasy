@@ -1,12 +1,12 @@
-public abstract class Enemy extends Actor{
-    public Enemy(String name, int maxHealth, int maxEnergy) {
-        super(name, maxHealth, maxEnergy);
+public abstract class Enemy extends Actor {
+    public Enemy(String name, int maxHealth, int maxEnergy, int actionValue) {
+        super(name, maxHealth, maxEnergy, actionValue);
     }
 
-    public void action1(){
-    }
-    public void action2(){
-    }
-    public void action3(){
+    public abstract void performAction(Actor target);
+
+    @Override
+    public void death() {
+        GameLogger.log(name + " został pokonany!");
     }
 }
