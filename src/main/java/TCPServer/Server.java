@@ -1,4 +1,6 @@
 package TCPServer;
+import TCPServer.Packets.LoginInfo;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -23,23 +25,24 @@ public class Server {
                     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
                     Object obj = ois.readObject();
-                    if (!(obj instanceof String)) {
-                        socket.close();
-                        continue;
-                    }
-                    String code = (String) obj;
-                    Session.PlayerConnection conn = new Session.PlayerConnection(socket, oos, ois);
+                    if ((obj instanceof String)) {
+                        String code = (String) obj;
+                        Session.PlayerConnection conn = new Session.PlayerConnection(socket, oos, ois);
 
-                    sessions.compute(code, (k, session) -> {
-                        if (session == null) {
-                            session = new Session(code);
-                            session.addPlayer(conn);
-                            return session;
-                        } else {
-                            session.addPlayer(conn);
-                            return null;
-                        }
-                    });
+                        sessions.compute(code, (k, session) -> {
+                            if (session == null) {
+                                session = new Session(code);
+                                session.addPlayer(conn);
+                                return session;
+                            } else {
+                                session.addPlayer(conn);
+                                return null;
+                            }
+                        });
+                    } else if (obj instanceof LoginInfo) {
+                        
+                    }
+
                 } catch (Exception e) {
                     try { socket.close(); } catch (Exception ignored) {}
                 }

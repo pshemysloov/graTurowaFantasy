@@ -4,6 +4,9 @@ out/
 !**/src/test/**/out/
 .kotlin
 
+# Ignoruj folder Maven build
+/target/
+
 ### Eclipse ###
 .apt_generated
 .classpath

@@ -3,8 +3,6 @@ package TCPServer.Packets;
 import java.io.Serializable;
 
 public class TurnInfo implements Serializable {
-    private static final long serialVersionUID = 1L;
-
     private final String nickname;
     private final int a;
     private final int b;

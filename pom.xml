@@ -11,6 +11,8 @@
   <properties>
     <maven.compiler.source>25</maven.compiler.source>
     <maven.compiler.target>25</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
 
   <dependencies>
@@ -20,5 +22,16 @@
       <artifactId>sqlite-jdbc</artifactId>
       <version>3.51.1.0</version>
     </dependency>
+
+    <!-- Biblioteka do hashowania haseł -->
+    <dependency>
+      <groupId>org.mindrot</groupId>
+      <artifactId>jbcrypt</artifactId>
+      <version>0.4</version>
+    </dependency>
+
+
   </dependencies>
+
+
 </project>
