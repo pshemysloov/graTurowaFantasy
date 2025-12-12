@@ -1,11 +1,14 @@
 Core\MeleeSkill.class
 Scenes\CreateAccountPanel.class
+TCPServer\ServerTerminal.class
 Scenes\TopBar.class
+TCPServer\ClientToServerHandler.class
 TCPServer\Session.class
 Core\Battleground.class
 Core\GamePanel.class
 Core\Main.class
 TCPServer\Client.class
+TCPServer\Packets\RegisterInfo.class
 Core\sk_Fireball.class
 TCPServer\Server.class
 Core\sk_SwordSlash.class
@@ -13,10 +16,12 @@ Core\OrkEnemy.class
 Core\Skill.class
 Core\SpecialSkill.class
 Scenes\DungeonPanel.class
+TCPServer\ClientConnection.class
 Core\MusicPlayer.class
 Scenes\MainMenuPanel.class
 Scenes\AuthorsPanel.class
 Core\ControlPanel.class
+TCPServer\DatabaseHandler.class
 Core\Player.class
 Core\Actor.class
 Scenes\AppWindow.class
@@ -27,6 +32,8 @@ Core\GoblinEnemy.class
 Core\sk_BowShot.class
 Core\SpecialSkillRegister.class
 Core\Enemy.class
+TCPServer\Global.class
 Core\sk_Heal.class
 TCPServer\Packets\LoginInfo.class
+TCPServer\Packets\RegisterResponse.class
 TCPServer\Session$PlayerConnection.class

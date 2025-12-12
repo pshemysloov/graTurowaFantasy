@@ -10,8 +10,8 @@ import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Client {
-    private static final String HOST = "localhost";
-    private static final int PORT = 12345;
+    private static final String HOST = Global.HOST;
+    private static final int PORT = Global.PORT;
 
     public static void main(String[] args) {
         AtomicBoolean started = new AtomicBoolean(false);

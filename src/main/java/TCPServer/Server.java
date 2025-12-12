@@ -1,6 +1,9 @@
 package TCPServer;
 import TCPServer.Packets.LoginInfo;
+import TCPServer.Packets.RegisterInfo;
+import TCPServer.Packets.RegisterResponse;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -9,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Server {
     private static final int PORT = 12345;
+    private DatabaseHandler dbHandler;
     private final ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
 
     public static void main(String[] args) throws Exception {
@@ -17,7 +21,16 @@ public class Server {
 
     public void start() throws Exception {
         try (ServerSocket server = new ServerSocket(PORT)) {
-            System.out.println("TCPServer.Server listening on port " + PORT);
+            System.out.println("[SERWER] TCPServer.Server nasłuchuje na porcie " + PORT);
+
+            // tworzenie database handler
+            dbHandler = new DatabaseHandler();
+
+            // tworzenie wątku terminala
+            ServerTerminal terminal = new ServerTerminal(dbHandler);
+            Thread terminalThread = new Thread(terminal);
+            terminalThread.start();
+
             while (true) {
                 Socket socket = server.accept();
                 try {
@@ -40,7 +53,21 @@ public class Server {
                             }
                         });
                     } else if (obj instanceof LoginInfo) {
-                        
+
+                    } else if (obj instanceof RegisterInfo) {
+                        // informacje o połączeniu z klientem
+                        ClientConnection client = new ClientConnection(socket, oos, ois);
+
+                        // tworzenie nowego wątku do obsługi rejestracji
+                        Thread registerThread = new Thread(() -> {
+                            try {
+                                handleRegisterInfo((RegisterInfo) obj, client);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+                        registerThread.start();
+
                     }
 
                 } catch (Exception e) {
@@ -49,4 +76,17 @@ public class Server {
             }
         }
     }
+
+    private void handleRegisterInfo(RegisterInfo info, ClientConnection client) throws IOException {
+        boolean success = dbHandler.registerUser(info);
+        RegisterResponse response;
+        if(success){
+            response = new RegisterResponse(true,"Zarejestrowano użytkownika");
+        } else {
+            response = new RegisterResponse(true,"Nie udało się zarejestrować użytkownika");
+        }
+        client.oos.writeObject(response);
+        client.oos.flush();
+    }
+
 }

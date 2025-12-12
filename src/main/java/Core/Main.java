@@ -3,9 +3,17 @@ package Core;
 import Scenes.*;
 
 import javax.swing.*;
+import TCPServer.*;
+import TCPServer.Packets.RegisterInfo;
+import TCPServer.Packets.RegisterResponse;
+
+import java.io.IOException;
 
 public class Main  {
     static AppWindow window = new AppWindow();
+    MainMenuPanel menu;
+    CreateAccountPanel createAccount;
+    AuthorsPanel authors;
 
     public static void main(String[] args) {
         new Main().start();
@@ -13,7 +21,7 @@ public class Main  {
 
     public void start() {
         SwingUtilities.invokeLater(() -> {
-            MainMenuPanel menu = new MainMenuPanel(
+            menu = new MainMenuPanel(
                     window,
                     // onLogin
                     () -> onLoginClicked(),
@@ -50,7 +58,7 @@ public class Main  {
 
     private void onCreateAccount() {
         SwingUtilities.invokeLater(() -> {
-            CreateAccountPanel createAccount = new CreateAccountPanel(window, () -> onConfirmClicked());
+            createAccount = new CreateAccountPanel(window, () -> onConfirmClicked());
             window.registerScene("createaccount",createAccount);
             window.showScene("createaccount");
             window.setVisible(true);
@@ -65,7 +73,7 @@ public class Main  {
 
     private void onAuthorsClicked() {
         SwingUtilities.invokeLater(() -> {
-            AuthorsPanel authors = new AuthorsPanel(window);
+            authors = new AuthorsPanel(window);
             window.registerScene("authors",authors);
             window.showScene("authors");
             window.setVisible(true);
@@ -78,7 +86,26 @@ public class Main  {
     }
 
     private void onConfirmClicked() {
-        JOptionPane.showMessageDialog(null, "Potwierdzenie", "Potwierdzenie", JOptionPane.INFORMATION_MESSAGE);
+        SwingUtilities.invokeLater(() -> {
+            ClientToServerHandler handler = new ClientToServerHandler();
+            String username = createAccount.getUsername();
+            String password = createAccount.getPassword();
+            RegisterInfo registerInfo = new RegisterInfo(username, password);
+            RegisterResponse response = null;
+            try {
+                response = handler.sendRegisterInfo(registerInfo);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            if(response == null){
+                JOptionPane.showMessageDialog(null, "Nie otrzymano odpowiedzi od serwera");
+                return;
+            }
+
+            JOptionPane.showMessageDialog(null,response.message);
+
+        });
     }
 
 }
