@@ -29,6 +29,14 @@
       <artifactId>jbcrypt</artifactId>
       <version>0.4</version>
     </dependency>
+
+      <!-- https://mvnrepository.com/artifact/com.github.freva/ascii-table -->
+      <dependency>
+          <groupId>com.github.freva</groupId>
+          <artifactId>ascii-table</artifactId>
+          <version>1.8.0</version>
+      </dependency>
+
   </dependencies>
 
 

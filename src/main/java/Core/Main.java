@@ -6,6 +6,7 @@ import javax.swing.*;
 import TCPServer.*;
 import TCPServer.Packets.RegisterInfo;
 import TCPServer.Packets.RegisterResponse;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 

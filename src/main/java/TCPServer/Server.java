@@ -8,10 +8,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Server {
-    private static final int PORT = 12345;
+    private static final int PORT = Global.PORT;
     private DatabaseHandler dbHandler;
     private final ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
 
@@ -62,8 +63,9 @@ public class Server {
                         Thread registerThread = new Thread(() -> {
                             try {
                                 handleRegisterInfo((RegisterInfo) obj, client);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
+                            } catch (IOException | SQLException e) {
+                                e.printStackTrace();
+                                //throw new RuntimeException(e);
                             }
                         });
                         registerThread.start();
@@ -77,7 +79,7 @@ public class Server {
         }
     }
 
-    private void handleRegisterInfo(RegisterInfo info, ClientConnection client) throws IOException {
+    private void handleRegisterInfo(RegisterInfo info, ClientConnection client) throws IOException, SQLException {
         boolean success = dbHandler.registerUser(info);
         RegisterResponse response;
         if(success){
