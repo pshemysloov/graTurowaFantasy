@@ -1,5 +1,7 @@
 package TCPServer;
 
+import TCPServer.Packets.LoginInfo;
+import TCPServer.Packets.LoginInfoResponse;
 import TCPServer.Packets.RegisterInfo;
 import TCPServer.Packets.RegisterResponse;
 
@@ -26,6 +28,31 @@ public class ClientToServerHandler {
             Object response = ois.readObject();
             if (response instanceof RegisterResponse) {
                 return (RegisterResponse) response;
+            } else {
+                return null;
+            }
+
+        } catch (Exception e) {
+            System.out.println("Problem z wyslaniem pakietu");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public LoginInfoResponse sendLoginInfo(LoginInfo info) throws IOException {
+        try {
+            Socket socket = new Socket(HOST, PORT);
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+
+            // wyślij pakiet
+            oos.writeObject(info);
+            oos.flush();
+
+            // Odbierz odpowiedź od serwera
+            Object response = ois.readObject();
+            if (response instanceof LoginInfoResponse) {
+                return (LoginInfoResponse) response;
             } else {
                 return null;
             }

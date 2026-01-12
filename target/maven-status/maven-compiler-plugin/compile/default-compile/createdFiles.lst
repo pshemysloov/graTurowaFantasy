@@ -3,6 +3,7 @@ Scenes\CreateAccountPanel.class
 TCPServer\ServerTerminal.class
 Scenes\TopBar.class
 TCPServer\ClientToServerHandler.class
+TCPServer\Packets\LoginInfoResponse.class
 TCPServer\Session.class
 Core\Battleground.class
 Core\GamePanel.class
@@ -30,10 +31,13 @@ Core\GameLogger.class
 TCPServer\Packets\TurnInfo.class
 Core\GoblinEnemy.class
 Core\sk_BowShot.class
+Scenes\EquipmentWindow.class
 Core\SpecialSkillRegister.class
+Scenes\LoginPanel.class
 Core\Enemy.class
 TCPServer\Global.class
 Core\sk_Heal.class
+Scenes\AfterLoginPanel.class
 TCPServer\Packets\LoginInfo.class
 TCPServer\Packets\RegisterResponse.class
 TCPServer\Session$PlayerConnection.class

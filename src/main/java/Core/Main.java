@@ -4,6 +4,8 @@ import Scenes.*;
 
 import javax.swing.*;
 import TCPServer.*;
+import TCPServer.Packets.LoginInfo;
+import TCPServer.Packets.LoginInfoResponse;
 import TCPServer.Packets.RegisterInfo;
 import TCPServer.Packets.RegisterResponse;
 import org.mindrot.jbcrypt.BCrypt;
@@ -15,6 +17,8 @@ public class Main  {
     MainMenuPanel menu;
     CreateAccountPanel createAccount;
     AuthorsPanel authors;
+    AfterLoginPanel afterLogin;
+    LoginPanel login;
 
     public static void main(String[] args) {
         new Main().start();
@@ -44,16 +48,24 @@ public class Main  {
 
     private void onLoginClicked() {
         SwingUtilities.invokeLater(() -> {
-            String nick = JOptionPane.showInputDialog(null, "Podaj nick:", "Logowanie", JOptionPane.PLAIN_MESSAGE);
-            if (nick != null && !nick.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Zalogowano jako: " + nick, "OK", JOptionPane.INFORMATION_MESSAGE);
+            login = new LoginPanel(window, () -> onLoginConfirmClicked());
+            window.registerScene("login",login);
+            window.showScene("login");
+            window.setVisible(true);
+
+//            String nick = JOptionPane.showInputDialog(null, "Podaj nick:", "Logowanie", JOptionPane.PLAIN_MESSAGE);
+//            if (nick != null && !nick.trim().isEmpty()) {
+//                JOptionPane.showMessageDialog(null, "Zalogowano jako: " + nick, "OK", JOptionPane.INFORMATION_MESSAGE);
+//
+
+
                 // po zalogowaniu otwórz Dungeon
-                Player player = new Player(nick, 150, 100, 0, 0, 10, 10, 10, 10, 10, 10, 1, 2);
-                DungeonPanel dungeon = new DungeonPanel(player);
-                window.registerScene("dungeon",dungeon);
-                window.showScene("dungeon");
-                window.setVisible(true);
-            }
+                //Player player = new Player(nick, 150, 100, 0, 0, 10, 10, 10, 10, 10, 10, 1, 2);
+                //DungeonPanel dungeon = new DungeonPanel(player);
+                //window.registerScene("dungeon",dungeon);
+                //window.showScene("dungeon");
+                //window.setVisible(true);
+//            }
         });
     }
 
@@ -107,6 +119,56 @@ public class Main  {
             JOptionPane.showMessageDialog(null,response.message);
 
         });
+    }
+
+    private void onLoginConfirmClicked(){
+        SwingUtilities.invokeLater(() -> {
+            ClientToServerHandler handler = new ClientToServerHandler();
+            String username = login.getUsername();
+            String password = login.getPassword();
+            LoginInfo loginInfo = new LoginInfo(username, password);
+            LoginInfoResponse response = null;
+            try {
+                response = handler.sendLoginInfo(loginInfo);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            if(response == null){
+                JOptionPane.showMessageDialog(null, "Nie otrzymano odpowiedzi od serwera");
+            }
+
+            else if(!response.success){
+                JOptionPane.showMessageDialog(null,response.message);
+            }
+
+            else {
+                //JOptionPane.showMessageDialog(null,"sukces");
+
+                afterLogin = new AfterLoginPanel(window, ()->OnWalkaKomputerClicked(), ()->OnWalkaGraczClicked(), ()->OnEkwipunekClicked(), ()->onWyjscieClicked());
+                window.registerScene("afterlogin",afterLogin);
+                window.showScene("afterlogin");
+                window.setVisible(true);
+
+            }
+
+        });
+    }
+
+    private void OnEkwipunekClicked() {
+        JOptionPane.showMessageDialog(null, "Brak ekwipunku");
+    }
+
+    private void OnWalkaGraczClicked() {
+        JOptionPane.showMessageDialog(null, "Walka z graczem");
+    }
+
+    private void OnWalkaKomputerClicked(){
+        JOptionPane.showMessageDialog(null, "Walka z komputerem");
+    }
+
+    private void onWyjscieClicked(){
+        System.exit(0);
     }
 
 }

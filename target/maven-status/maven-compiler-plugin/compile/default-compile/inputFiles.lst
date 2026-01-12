@@ -18,10 +18,13 @@ C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFan
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\Skill.java
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\SpecialSkill.java
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\SpecialSkillRegister.java
+C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\AfterLoginPanel.java
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\AppWindow.java
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\AuthorsPanel.java
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\CreateAccountPanel.java
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\DungeonPanel.java
+C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\EquipmentWindow.java
+C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\LoginPanel.java
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\MainMenuPanel.java
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\TopBar.java
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Client.java
@@ -30,6 +33,7 @@ C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFan
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\DatabaseHandler.java
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Global.java
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\LoginInfo.java
+C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\LoginInfoResponse.java
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\RegisterInfo.java
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\RegisterResponse.java
 C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\TurnInfo.java

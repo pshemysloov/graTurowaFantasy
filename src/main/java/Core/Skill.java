@@ -1,19 +1,24 @@
 package Core;
 
-public abstract class Skill {
-    String name;
-    String description;
-    int energyCost;
+import java.util.ArrayList;
 
-    public Skill(String name, String description, int energyCost) {
+public abstract class Skill {
+    public String name;
+    public String description;
+    public int energyCost;
+    public int energyGain;
+    public boolean endsTurn;
+    public TargetType targetType;
+
+    public Skill(String name, String description, int energyCost, int energyGain, boolean endsTurn, TargetType targetType) {
         this.name = name;
         this.description = description;
         this.energyCost = energyCost;
+        this.energyGain = energyGain;
+        this.endsTurn = endsTurn;
+        this.targetType = targetType;
     }
 
-    public abstract void useSkill(Actor user, Actor target);
+    public abstract String useSkill(Actor user, ArrayList<Actor> target);
 
-    public String getName() { return name; }
-    public String getDescription() { return description; }
-    public int getEnergyCost() { return energyCost; }
 }

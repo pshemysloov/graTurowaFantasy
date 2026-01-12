@@ -1,52 +1,28 @@
 package Core;
 
 public abstract class Actor {
-    String name;
-    int maxHealth;
-    int health;
-    int maxEnergy;
-    int energy;
-    int shield;
-    int actionValue;
+    public String name;
+    public int maxHealth;
+    public int health;
+    public int maxEnergy;
+    public int energy;
 
-    public Actor(String name, int maxHealth, int maxEnergy, int actionValue) {
+    public Attributes attributes;
+
+
+    public Actor(String name, int strength, int accuracy, int intelligence, int willpower, int constitution) {
         this.name = name;
-        this.maxHealth = maxHealth;
-        this.maxEnergy = maxEnergy;
+        this.maxHealth = constitution*8;
+        this.maxEnergy = willpower*10;
         this.health = maxHealth;
         this.energy = maxEnergy;
-        this.shield = 0;
-        this.actionValue = actionValue;
-    }
-
-    public Actor(String name, int maxHealth, int maxEnergy) {
-        this.name = name;
-        this.maxHealth = maxHealth;
-        this.maxEnergy = maxEnergy;
-        this.health = maxHealth;
-        this.energy = maxEnergy;
-        this.shield = 0;
+        attributes = new Attributes(strength, accuracy, intelligence, willpower, constitution);
     }
 
     public void takeDamage(int damage) {
-        int actualDamage = Math.max(0, damage - shield);
-        this.health -= actualDamage;
-        if (health <= 0) {
-            this.health = 0;
-            death();
-        }
+        health -= damage;
+        if (health <= 0) health = 0;
     }
 
-    public abstract void death();
 
-    public String getName() { return name; }
-    public int getHealth() { return health; }
-    public int getMaxHealth() { return maxHealth; }
-    public int getEnergy() { return energy; }
-    public int getMaxEnergy() { return maxEnergy; }
-    public int getShield() { return shield; }
-    public int getActionValue() { return actionValue; }
-    public void setHealth(int health) { this.health = Math.min(health, maxHealth); }
-    public void setEnergy(int energy) { this.energy = Math.min(energy, maxEnergy); }
-    public void setShield(int shield) { this.shield = shield; }
 }

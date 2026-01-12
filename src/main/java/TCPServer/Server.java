@@ -1,5 +1,6 @@
 package TCPServer;
 import TCPServer.Packets.LoginInfo;
+import TCPServer.Packets.LoginInfoResponse;
 import TCPServer.Packets.RegisterInfo;
 import TCPServer.Packets.RegisterResponse;
 
@@ -54,6 +55,19 @@ public class Server {
                             }
                         });
                     } else if (obj instanceof LoginInfo) {
+                        // informacje o połączeniu z klientem
+                        ClientConnection client = new ClientConnection(socket, oos, ois);
+
+                        // tworzenie nowego wątku do obsługi logowania
+                        Thread loginThread = new Thread(() -> {
+                            try {
+                                handleLoginInfo((LoginInfo) obj, client);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                //throw new RuntimeException(e);
+                            }
+                        });
+                        loginThread.start();
 
                     } else if (obj instanceof RegisterInfo) {
                         // informacje o połączeniu z klientem
@@ -77,6 +91,12 @@ public class Server {
                 }
             }
         }
+    }
+
+    private void handleLoginInfo(LoginInfo info, ClientConnection client) throws IOException {
+        LoginInfoResponse response = dbHandler.loginUser(info);
+        client.oos.writeObject(response);
+        client.oos.flush();
     }
 
     private void handleRegisterInfo(RegisterInfo info, ClientConnection client) throws IOException, SQLException {
