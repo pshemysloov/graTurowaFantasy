@@ -14,7 +14,7 @@ public class Server {
     private DatabaseHandler dbHandler;
     private final ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
 
-    public static void main(String[] args) throws Exception {
+    static void main() throws Exception {
         new Server().start();
     }
 

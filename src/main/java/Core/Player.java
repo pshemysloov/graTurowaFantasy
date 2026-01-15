@@ -1,6 +1,5 @@
 package Core;
 
-import java.util.Scanner;
 
 public class Player extends Actor{
     public Skill[] skills = new Skill[4];

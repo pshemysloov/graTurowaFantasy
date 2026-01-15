@@ -22,7 +22,7 @@ public class Attack extends Skill {
     @Override
     public String useSkill(Actor user, ArrayList<Actor> target) {
         int damage = user.attributes.strength * 2;
-        String return_str = new String();
+        String return_str = "";
         for (Actor actor : target) {
             actor.takeDamage(damage);
             return_str += user.name + ": zadano" +damage+" obrażeń postaci "+actor.name+"\n";

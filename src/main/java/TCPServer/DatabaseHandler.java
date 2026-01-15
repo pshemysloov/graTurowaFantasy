@@ -13,7 +13,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class DatabaseHandler {
     private static final String url = "jdbc:sqlite:database.db";
     private Connection conn;
-    private int saltValue = 12; // zakres 4 - 30
+    private final int saltValue = 12; // zakres 4 - 30
 
     DatabaseHandler() {
         try {
@@ -24,11 +24,11 @@ public class DatabaseHandler {
         }
     }
 
-    public void createDatabase() throws SQLException {
+    public void createDatabase() {
         String sql = """
             CREATE TABLE IF NOT EXISTS users (
-                user_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                login TEXT UNIQUE, 
+                user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                login TEXT UNIQUE,
                 password TEXT,
                 player_data TEXT,
                 is_logged INTEGER DEFAULT 0
@@ -92,7 +92,7 @@ public class DatabaseHandler {
         }
     }
 
-    public boolean registerUser(RegisterInfo packet) throws SQLException {
+    public boolean registerUser(RegisterInfo packet) {
         System.out.println("[DB HANDLER] Otrzymano pakiet z register info");
 
         String sql = "INSERT INTO users (login, password, player_data) VALUES (?, ?, ?)";
@@ -167,8 +167,7 @@ public class DatabaseHandler {
             System.err.println("[DB HANDLER] Wystąpił błąd SQL podczas logowania");
             e.printStackTrace();
             String message = "Wystąpił błąd SQL podczas logowania";
-            LoginInfoResponse response = new LoginInfoResponse(false, message);
-            return response;
+            return new LoginInfoResponse(false, message);
         }
     }
 

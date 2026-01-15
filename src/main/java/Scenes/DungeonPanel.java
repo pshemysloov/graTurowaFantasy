@@ -7,7 +7,6 @@ import Core.Enemies.Zombie;
 import javax.swing.*;
 import java.awt.*;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 public class DungeonPanel extends JPanel {
     private final AppWindow window;
@@ -17,7 +16,7 @@ public class DungeonPanel extends JPanel {
     private final JPanel rightPanel = new JPanel();
     private final JTextField hpField = new JTextField();
     private final JTextField energyField = new JTextField();
-    private CombatHandler combatHandler;
+    private final CombatHandler combatHandler;
 
     public DungeonPanel(AppWindow window, Player player) {
         this.window = window;
@@ -53,7 +52,7 @@ public class DungeonPanel extends JPanel {
             if (skill != null) {
                 JButton skillBtn = new JButton(skill.name);
                 skillBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-                skillBtn.addActionListener(e -> player.setSelectedSkill(skill));
+                skillBtn.addActionListener(_ -> player.setSelectedSkill(skill));
                 rightPanel.add(skillBtn);
                 rightPanel.add(Box.createVerticalStrut(5));
             }
@@ -124,7 +123,7 @@ public class DungeonPanel extends JPanel {
 
                 JButton enemyBtn = new JButton(e.name);
                 enemyBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-                enemyBtn.addActionListener(ev -> {
+                enemyBtn.addActionListener(_ -> {
                     // Znajdź gracza w walce i ustaw mu cel
                     for(Actor a : combatHandler.getActorsInCombat()) {
                         if(a instanceof Player) {
@@ -171,7 +170,7 @@ public class DungeonPanel extends JPanel {
     public void handleBattleEnd(boolean victory) {
         if(victory){
             JOptionPane.showMessageDialog(this, "Wygrana!");
-        } else if(!victory) {
+        } else  {
             JOptionPane.showMessageDialog(this, "Przegrana!");
         }
         musicPlayer.stopMusic();

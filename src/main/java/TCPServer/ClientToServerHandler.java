@@ -12,10 +12,9 @@ public class ClientToServerHandler {
     private static final int PORT = Global.PORT;
 
     public RegisterResponse sendRegisterInfo(RegisterInfo info) throws IOException {
-        try {
-            Socket socket = new Socket(HOST, PORT);
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+        try (Socket socket = new Socket(HOST, PORT);
+             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
 
             // wyślij pakiet
             oos.writeObject(info);
@@ -37,10 +36,10 @@ public class ClientToServerHandler {
     }
 
     public LoginInfoResponse sendLoginInfo(LoginInfo info) throws IOException {
-        try {
-            Socket socket = new Socket(HOST, PORT);
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+        try (Socket socket = new Socket(HOST, PORT);
+             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+
 
             // wyślij pakiet
             oos.writeObject(info);
@@ -62,10 +61,10 @@ public class ClientToServerHandler {
     }
 
     public void sendLogoutInfo(String nickname) throws IOException {
-        try {
-            Socket socket = new Socket(HOST, PORT);
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+        try (Socket socket = new Socket(HOST, PORT);
+             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+
 
             oos.writeObject(new LogoutInfo(nickname));
             oos.flush();

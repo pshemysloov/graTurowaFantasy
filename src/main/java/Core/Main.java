@@ -8,7 +8,6 @@ import TCPServer.Packets.LoginInfo;
 import TCPServer.Packets.LoginInfoResponse;
 import TCPServer.Packets.RegisterInfo;
 import TCPServer.Packets.RegisterResponse;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -24,7 +23,7 @@ public class Main  {
     LoginPanel login;
     Player player;
 
-    public static void main(String[] args) {
+    static void main() {
         new Main().start();
     }
 
@@ -43,15 +42,15 @@ public class Main  {
             menu = new MainMenuPanel(
                     window,
                     // onLogin
-                    () -> onLoginClicked(),
+                    this::onLoginClicked,
                     // onCreateAccount
-                    () -> onCreateAccount(),
+                    this::onCreateAccount,
                     // onOptions
-                    () -> onOptionsClicked(),
+                    this::onOptionsClicked,
                     // onAuthors
-                    () -> onAuthorsClicked(),
+                    this::onAuthorsClicked,
                     // onExit
-                    () -> onExitClicked()
+                    this::onExitClicked
             );
 
             window.registerScene("mainmenu", menu);
@@ -62,7 +61,7 @@ public class Main  {
 
     private void onLoginClicked() {
         SwingUtilities.invokeLater(() -> {
-            login = new LoginPanel(window, () -> onLoginConfirmClicked());
+            login = new LoginPanel(window, this::onLoginConfirmClicked);
             window.registerScene("login",login);
             window.showScene("login");
             window.setVisible(true);
@@ -85,7 +84,7 @@ public class Main  {
 
     private void onCreateAccount() {
         SwingUtilities.invokeLater(() -> {
-            createAccount = new CreateAccountPanel(window, () -> onConfirmClicked());
+            createAccount = new CreateAccountPanel(window, this::onConfirmClicked);
             window.registerScene("createaccount",createAccount);
             window.showScene("createaccount");
             window.setVisible(true);
@@ -118,7 +117,7 @@ public class Main  {
             String username = createAccount.getUsername();
             String password = createAccount.getPassword();
             RegisterInfo registerInfo = new RegisterInfo(username, password);
-            RegisterResponse response = null;
+            RegisterResponse response;
             try {
                 response = handler.sendRegisterInfo(registerInfo);
             } catch (IOException e) {
@@ -141,7 +140,7 @@ public class Main  {
             String username = login.getUsername();
             String password = login.getPassword();
             LoginInfo loginInfo = new LoginInfo(username, password);
-            LoginInfoResponse response = null;
+            LoginInfoResponse response;
             try {
                 response = handler.sendLoginInfo(loginInfo);
             } catch (IOException e) {
@@ -161,7 +160,7 @@ public class Main  {
 
                 player = createPlayerFromServerData(response);
 
-                afterLogin = new AfterLoginPanel(window, ()->OnWalkaKomputerClicked(), ()->OnWalkaGraczClicked(), ()->OnEkwipunekClicked(), ()->onWyjscieClicked());
+                afterLogin = new AfterLoginPanel(window, this::OnWalkaKomputerClicked, this::OnWalkaGraczClicked, this::OnEkwipunekClicked, this::onWyjscieClicked);
                 window.registerScene("afterlogin",afterLogin);
                 window.showScene("afterlogin");
                 window.setVisible(true);
@@ -221,12 +220,15 @@ public class Main  {
         //JOptionPane.showMessageDialog(null, "Walka z komputerem");
         if (player != null) {
             player.resetStatus();
+            DungeonPanel dungeon = new DungeonPanel(window, player);
+            window.registerScene("dungeon",dungeon);
+            window.showScene("dungeon");
+            window.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Player jest null");
         }
 
-        DungeonPanel dungeon = new DungeonPanel(window, player);
-        window.registerScene("dungeon",dungeon);
-        window.showScene("dungeon");
-        window.setVisible(true);
+
 
     }
 

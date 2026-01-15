@@ -5,7 +5,6 @@ import Scenes.DungeonPanel;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Scanner;
 
 public class CombatHandler implements Runnable{
 
@@ -48,7 +47,6 @@ public class CombatHandler implements Runnable{
         }
 
 
-        OuterLoop:
         while(actorsInCombat.size() > 1){
             Iterator<Actor> iterator = actorsInCombat.iterator();
             while (iterator.hasNext()) {
@@ -190,9 +188,8 @@ public class CombatHandler implements Runnable{
                     targets.add(potentialTargets.get(randomIndex));
                 }
             }
-            case SELF -> {
-                targets.add(source);
-            }
+            case SELF -> targets.add(source);
+
             default -> throw new IllegalStateException("Unexpected value: " + targetType);
         }
         return targets;

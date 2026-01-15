@@ -1,6 +1,6 @@
 package TCPServer;
 
-import javax.xml.crypto.Data;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class ServerTerminal implements Runnable{
-    private DatabaseHandler dbHandler;
+    private final DatabaseHandler dbHandler;
 
     public ServerTerminal(DatabaseHandler dbHandler) {
         this.dbHandler = dbHandler;

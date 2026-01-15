@@ -7,7 +7,6 @@ import Core.SkillRegister;
 import java.util.ArrayList;
 
 public class Zombie extends Enemy {
-    String name = "Zombie";
 
     public Zombie() {
         super("Zombie",  5, 5, 5, 5, 5, SkillRegister.getSkillById(0), SkillRegister.getSkillById(1), "/goblin.jpg");
@@ -18,7 +17,7 @@ public class Zombie extends Enemy {
     }
 
     public String takeTurn(ArrayList<Actor> target){
-        String return_str = new String();
+        String return_str;
         if (energy >= basicAction.energyCost) {
             energy -= basicAction.energyCost;
             energy += basicAction.energyGain;
