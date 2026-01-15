@@ -1,9 +1,6 @@
 package TCPServer;
 
-import TCPServer.Packets.LoginInfo;
-import TCPServer.Packets.LoginInfoResponse;
-import TCPServer.Packets.RegisterInfo;
-import TCPServer.Packets.RegisterResponse;
+import TCPServer.Packets.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -63,4 +60,18 @@ public class ClientToServerHandler {
             return null;
         }
     }
+
+    public void sendLogoutInfo(String nickname) throws IOException {
+        try {
+            Socket socket = new Socket(HOST, PORT);
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+
+            oos.writeObject(new LogoutInfo(nickname));
+            oos.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

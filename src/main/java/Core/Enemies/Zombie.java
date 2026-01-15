@@ -10,7 +10,11 @@ public class Zombie extends Enemy {
     String name = "Zombie";
 
     public Zombie() {
-        super("Zombie",  5, 5, 5, 5, 5, SkillRegister.getSkillById(0), SkillRegister.getSkillById(1));
+        super("Zombie",  5, 5, 5, 5, 5, SkillRegister.getSkillById(0), SkillRegister.getSkillById(1), "/goblin.jpg");
+    }
+
+    public Zombie(String name) {
+        super(name,  5, 5, 5, 5, 5, SkillRegister.getSkillById(0), SkillRegister.getSkillById(1), "/goblin.jpg");
     }
 
     public String takeTurn(ArrayList<Actor> target){

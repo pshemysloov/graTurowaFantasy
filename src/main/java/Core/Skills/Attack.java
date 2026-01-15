@@ -25,7 +25,7 @@ public class Attack extends Skill {
         String return_str = new String();
         for (Actor actor : target) {
             actor.takeDamage(damage);
-            return_str += "Zadano "+damage+" obrażeń "+actor.name+"\n";
+            return_str += user.name + ": zadano" +damage+" obrażeń postaci "+actor.name+"\n";
         }
 
         return return_str;

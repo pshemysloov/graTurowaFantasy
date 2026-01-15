@@ -1,8 +1,5 @@
 package TCPServer;
-import TCPServer.Packets.LoginInfo;
-import TCPServer.Packets.LoginInfoResponse;
-import TCPServer.Packets.RegisterInfo;
-import TCPServer.Packets.RegisterResponse;
+import TCPServer.Packets.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,6 +24,8 @@ public class Server {
 
             // tworzenie database handler
             dbHandler = new DatabaseHandler();
+            // Resetowanie flag przy starcie serwera
+            dbHandler.resetLoginFlags();
 
             // tworzenie wątku terminala
             ServerTerminal terminal = new ServerTerminal(dbHandler);
@@ -84,6 +83,18 @@ public class Server {
                         });
                         registerThread.start();
 
+                    } else if (obj instanceof LogoutInfo) {
+                        Thread logoutThread = new Thread(() -> {
+                            try {
+                                handleLogoutInfo((LogoutInfo) obj);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                throw new RuntimeException(e);
+                            }
+
+                        });
+                        logoutThread.start();
+
                     }
 
                 } catch (Exception e) {
@@ -109,6 +120,10 @@ public class Server {
         }
         client.oos.writeObject(response);
         client.oos.flush();
+    }
+
+    private void handleLogoutInfo(LogoutInfo info) throws IOException {
+        dbHandler.logoutUser(info.nickname);
     }
 
 }

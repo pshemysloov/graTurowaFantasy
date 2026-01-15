@@ -13,7 +13,7 @@ public class AppWindow extends JFrame {
     public AppWindow() {
         super("Gra Turowa Fantasy");
         getContentPane().setLayout(cards);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(1000, 750);
         setLocationRelativeTo(null);
     }

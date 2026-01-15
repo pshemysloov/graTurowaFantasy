@@ -10,7 +10,10 @@ import TCPServer.Packets.RegisterInfo;
 import TCPServer.Packets.RegisterResponse;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main  {
     static AppWindow window = new AppWindow();
@@ -19,12 +22,23 @@ public class Main  {
     AuthorsPanel authors;
     AfterLoginPanel afterLogin;
     LoginPanel login;
+    Player player;
 
     public static void main(String[] args) {
         new Main().start();
     }
 
     public void start() {
+        // Zmień zachowanie przycisku X, aby nie zamykał aplikacji natychmiast
+        window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        window.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                handleLogoutAndExit();
+            }
+        });
+
+
         SwingUtilities.invokeLater(() -> {
             menu = new MainMenuPanel(
                     window,
@@ -95,7 +109,7 @@ public class Main  {
 
     private void onExitClicked() {
         // zamknięcie aplikacji
-        System.exit(0);
+        handleLogoutAndExit();
     }
 
     private void onConfirmClicked() {
@@ -143,7 +157,9 @@ public class Main  {
             }
 
             else {
-                //JOptionPane.showMessageDialog(null,"sukces");
+                //JOptionPane.showMessageDialog(null,response.message);
+
+                player = createPlayerFromServerData(response);
 
                 afterLogin = new AfterLoginPanel(window, ()->OnWalkaKomputerClicked(), ()->OnWalkaGraczClicked(), ()->OnEkwipunekClicked(), ()->onWyjscieClicked());
                 window.registerScene("afterlogin",afterLogin);
@@ -155,6 +171,44 @@ public class Main  {
         });
     }
 
+    private Player createPlayerFromServerData(LoginInfoResponse response){
+        ArrayList<Integer> stats = new ArrayList<>();
+
+        if (response.message != null && !response.message.isEmpty()) {
+            String[] parts = response.message.split(";");
+            for (String part : parts) {
+                try {
+                    stats.add(Integer.parseInt(part.trim()));
+                } catch (NumberFormatException e) {
+                    // Ignoruj części, które nie są liczbami, jeśli message zawiera też tekst
+                }
+            }
+        }
+
+        if (stats.size() != 11) {
+            System.err.println("Nieprawidłowa liczba statystyk otrzymanych z serwera");
+            return null;
+        }
+
+        // stats: 0:str, 1:acc, 2:int, 3:will, 4:const, 5-8:skill_ids, 9:level, 10:exp
+        return new Player(
+                response.nickname,
+                stats.get(0), // strength
+                stats.get(1), // accuracy
+                stats.get(2), // intelligence
+                stats.get(3), // willpower
+                stats.get(4), // constitution
+                SkillRegister.getSkillById(stats.get(5)), // skill1
+                SkillRegister.getSkillById(stats.get(6)), // skill2
+                SkillRegister.getSkillById(stats.get(7)), // skill3
+                SkillRegister.getSkillById(stats.get(8)), // skill4
+                stats.get(9), // level
+                stats.get(10) // experience
+        );
+
+
+    }
+
     private void OnEkwipunekClicked() {
         JOptionPane.showMessageDialog(null, "Brak ekwipunku");
     }
@@ -164,10 +218,31 @@ public class Main  {
     }
 
     private void OnWalkaKomputerClicked(){
-        JOptionPane.showMessageDialog(null, "Walka z komputerem");
+        //JOptionPane.showMessageDialog(null, "Walka z komputerem");
+        if (player != null) {
+            player.resetStatus();
+        }
+
+        DungeonPanel dungeon = new DungeonPanel(window, player);
+        window.registerScene("dungeon",dungeon);
+        window.showScene("dungeon");
+        window.setVisible(true);
+
     }
 
     private void onWyjscieClicked(){
+        handleLogoutAndExit();
+    }
+
+    private void handleLogoutAndExit() {
+        if (player != null) {
+            try {
+                ClientToServerHandler handler = new ClientToServerHandler();
+                handler.sendLogoutInfo(player.name);
+            } catch (IOException e) {
+                System.err.println("Błąd podczas wysyłania informacji o wylogowaniu: " + e.getMessage());
+            }
+        }
         System.exit(0);
     }
 

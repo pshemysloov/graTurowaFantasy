@@ -7,6 +7,8 @@ public class Player extends Actor{
     public int level;
     public int experience;
 
+    private Skill selectedSkill;
+    private Actor selectedTarget;
 
     public Player(String name, int strength, int accuracy, int intelligence, int willpower, int constitution, Skill skill1, Skill skill2, Skill skill3, Skill skill4, int level, int experience) {
         super(name, strength, accuracy, intelligence, willpower, constitution);
@@ -18,18 +20,39 @@ public class Player extends Actor{
         this.experience = experience;
     }
 
-    public void takeTurn() {
 
+    public synchronized Skill chooseSkill() {
+        selectedSkill = null;
+        try {
+            while (selectedSkill == null) {
+                wait();
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return selectedSkill;
     }
 
-    public Skill chooseSkill() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose skill(1-4): ");
-        int choice = scanner.nextInt();
-        if (choice < 1 || choice > 4) return null;
-        return skills[choice-1];
+    public synchronized void setSelectedSkill(Skill skill) {
+        this.selectedSkill = skill;
+        notifyAll();
     }
 
+    public synchronized Actor chooseTarget() {
+        selectedTarget = null;
+        try {
+            while (selectedTarget == null) {
+                wait();
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return selectedTarget;
+    }
 
+    public synchronized void setSelectedTarget(Actor target) {
+        this.selectedTarget = target;
+        notifyAll();
+    }
 
 }

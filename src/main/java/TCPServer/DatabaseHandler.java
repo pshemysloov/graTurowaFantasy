@@ -30,7 +30,9 @@ public class DatabaseHandler {
                 user_id INTEGER PRIMARY KEY AUTOINCREMENT, 
                 login TEXT UNIQUE, 
                 password TEXT,
-                player_data TEXT)
+                player_data TEXT,
+                is_logged INTEGER DEFAULT 0
+                )
 """;
 
         try(Statement stmt = conn.createStatement()){
@@ -55,7 +57,8 @@ public class DatabaseHandler {
                 String login = rs.getString("login");
                 String password = rs.getString("password");
                 String player_data = rs.getString("player_data");
-                String[] row = {user_id, login, password, player_data};
+                String is_logged = rs.getString("is_logged");
+                String[] row = {user_id, login, password, player_data, is_logged};
                 data.add(row);
             }
 
@@ -63,7 +66,9 @@ public class DatabaseHandler {
                     new Column().header("user_id").with(u -> u[0]),
                     new Column().header("login").with(u -> u[1]),
                     new Column().header("password").with(u -> u[2]),
-                    new Column().header("player_data").with(u -> u[3])
+                    new Column().header("player_data").with(u -> u[3]),
+                    new Column().header("is_logged").with(u -> u[4])
+
             )));
 
             System.out.println("[DB HANDLER] Pomyślnie wyświetlono wszystkie rekordy");
@@ -121,12 +126,30 @@ public class DatabaseHandler {
             pstmt.setString(1, packet.login);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
+                    // Sprawdzenie, czy użytkownik jest już zalogowany
+                    int isLogged = rs.getInt("is_logged");
+                    if (isLogged != 0) {
+                        System.out.println("[DB HANDLER] Użytkownik jest już zalogowany");
+                        return new LoginInfoResponse(false, "Użytkownik jest już zalogowany");
+                    }
+
+
                     String hashedPassword = rs.getString("password");
                     if (hashedPassword != null && BCrypt.checkpw(packet.password, hashedPassword)) {
+
+                        // Ustawienie flagi is_logged na 1
+                        String updateSql = "UPDATE users SET is_logged = 1 WHERE login = ?";
+                        try (PreparedStatement updatePstmt = conn.prepareStatement(updateSql)) {
+                            updatePstmt.setString(1, packet.login);
+                            updatePstmt.executeUpdate();
+                        }
+
                         String message = rs.getString("player_data");
-                        LoginInfoResponse response = new LoginInfoResponse(true, message);
+                        String nickname = rs.getString("login");
+                        LoginInfoResponse response = new LoginInfoResponse(true, message, nickname);
                         System.out.println("[DB HANDLER] Zalogowano pomyślnie");
                         return response;
+
                     } else {
                         String message = "Nieprawidłowe hasło";
                         LoginInfoResponse response = new LoginInfoResponse(false, message);
@@ -148,4 +171,35 @@ public class DatabaseHandler {
             return response;
         }
     }
+
+    public void resetLoginFlags() {
+        String sql = "UPDATE users SET is_logged = 0";
+
+        try (Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(sql);
+            System.out.println("[DB HANDLER] Pomyślnie zresetowano flagi logowania dla wszystkich użytkowników");
+        } catch (SQLException e) {
+            System.err.println("[DB HANDLER] Wystąpił błąd SQL podczas resetowania flag logowania");
+            e.printStackTrace();
+        }
+    }
+
+    public void logoutUser(String nickname) {
+        String sql = "UPDATE users SET is_logged = 0 WHERE login = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, nickname);
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("[DB HANDLER] Wylogowano użytkownika: " + nickname);
+            } else {
+                System.out.println("[DB HANDLER] Nie znaleziono takiego użytkownika: " + nickname);
+            }
+        } catch (SQLException e) {
+            System.err.println("[DB HANDLER] Błąd podczas wylogowywania użytkownika");
+            e.printStackTrace();
+        }
+    }
+
+
 }

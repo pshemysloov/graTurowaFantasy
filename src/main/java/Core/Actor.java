@@ -24,5 +24,9 @@ public abstract class Actor {
         if (health <= 0) health = 0;
     }
 
+    public void resetStatus() {
+        this.health = maxHealth;
+        this.energy = maxEnergy;
+    }
 
 }

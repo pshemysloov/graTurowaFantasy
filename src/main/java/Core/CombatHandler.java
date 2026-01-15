@@ -1,28 +1,41 @@
 package Core;
 
+import Scenes.DungeonPanel;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
-public class CombatHandler {
+public class CombatHandler implements Runnable{
 
     ArrayList<Actor> actorsInCombat;
     ArrayList<Actor> player;
+    private DungeonPanel dungeonPanel;
 
     public CombatHandler(){
         actorsInCombat = new ArrayList<>();
         player = new ArrayList<>();
     }
 
-    void addActor(Actor actor){
+    public void setDungeonPanel(Scenes.DungeonPanel panel) {
+        this.dungeonPanel = panel;
+    }
+
+    public void addActor(Actor actor){
         actorsInCombat.add(actor);
     }
 
-    void removeActor(Actor actor){
-        actorsInCombat.remove(actor);
+    public ArrayList<Actor> getActorsInCombat() {
+        return actorsInCombat;
     }
 
-    void mainLoop(){
+    @Override
+    public void run() {
+        mainLoop();
+    }
+
+    private void mainLoop(){
         for (Actor actor : actorsInCombat) {
             if (actor instanceof Player){
                 player.add(actor);
@@ -47,6 +60,9 @@ public class CombatHandler {
                     // 1. Czy żyje
                     if (enemyActor.health <= 0) {
                         iterator.remove();
+                        if (dungeonPanel != null) {
+                            SwingUtilities.invokeLater(() -> dungeonPanel.refreshEnemies());
+                        }
                         continue;
                     }
 
@@ -54,14 +70,18 @@ public class CombatHandler {
 
 
                     // 3. Info
-                    System.out.println("Enemy turn: "+enemyActor.name);
-                    System.out.println("HP: " + enemyActor.health);
-                    System.out.println("Energy: " + enemyActor.energy);
+                    GameLogger.log("Enemy turn: " + enemyActor.name);
+                    GameLogger.log("HP: " + enemyActor.health);
+                    GameLogger.log("Energy: " + enemyActor.energy);
 
                     // 4. Akcja
                     String action_msg = enemyActor.takeTurn(player);
-                    System.out.println(action_msg);
+                    GameLogger.log(action_msg);
 
+                    // Odśwież UI po ataku przeciwnika
+                    if (dungeonPanel != null) {
+                        SwingUtilities.invokeLater(() -> dungeonPanel.refreshEnemies());
+                    }
 
 
                 } else if (actor instanceof Player) {
@@ -69,20 +89,21 @@ public class CombatHandler {
 
                     // 1. Czy żyje
                     if (playerActor.health <= 0) {
-                        break OuterLoop;
+                        dungeonPanel.handleBattleEnd(false);
+                        return;
                     }
 
                     // 2. Status effects
                     //playerActor.applyStatusEffects();
 
-                    if (playerActor.health <= 0) {
-                        break OuterLoop;
-                    }
+                    //if (playerActor.health <= 0) {
+                    //    break OuterLoop;
+                    //}
 
                     // 3. Info
-                    System.out.println("Player turn");
-                    System.out.println("HP: " + playerActor.health);
-                    System.out.println("Energy: " + playerActor.energy);
+                    GameLogger.log("Player turn");
+                    GameLogger.log("HP: " + playerActor.health);
+                    GameLogger.log("Energy: " + playerActor.energy);
 
                     boolean endTurn = false;
 
@@ -91,12 +112,12 @@ public class CombatHandler {
                         Skill skill = playerActor.chooseSkill();
 
                         if (skill == null) {
-                            System.out.println("Invalid skill choice! (null)");
+                            GameLogger.log("Niepoprawny wybór (null)");
                             continue;
                         }
 
                         if (playerActor.energy < skill.energyCost) {
-                            System.out.println("Not enough energy!");
+                            GameLogger.log("Za mało energii");
                             continue;
                         }
 
@@ -108,13 +129,25 @@ public class CombatHandler {
                         playerActor.energy -= skill.energyCost;
                         playerActor.energy += skill.energyGain;
                         String skill_msg = skill.useSkill(playerActor, targets);
-                        System.out.println(skill_msg);
+                        GameLogger.log(skill_msg);
 
                         endTurn = skill.endsTurn;
+
+                        // Odśwież UI po każdym użyciu skilla przez gracza
+                        if (dungeonPanel != null) {
+                            SwingUtilities.invokeLater(() -> dungeonPanel.refreshEnemies());
+                        }
                     }
+                }
+
+                if (dungeonPanel != null) {
+                    SwingUtilities.invokeLater(() -> dungeonPanel.refreshEnemies());
                 }
             }
         }
+
+        GameLogger.log("Wygrana!");
+        dungeonPanel.handleBattleEnd(true);
 
     }
 
@@ -122,33 +155,47 @@ public class CombatHandler {
         ArrayList<Actor> targets = new ArrayList<>();
         switch (targetType) {
             case SINGLE_TARGET -> {
-                System.out.println("Select target: ");
-                Scanner scanner = new Scanner(System.in);
-                int targetId = scanner.nextInt();
-                targets.add(actorsInCombat.get(targetId));
-                return targets;
+                if (source instanceof Player) {
+                    GameLogger.log("Wybierz cel klikając na przeciwnika...");
+                    Actor target = ((Player) source).chooseTarget();
+                    targets.add(target);
+                } else {
+                    // Logika dla NPC: wybiera gracza
+                    for (Actor a : actorsInCombat) {
+                        if (a instanceof Player) {
+                            targets.add(a);
+                            break;
+                        }
+                    }
+                }
             }
             case ALL_TARGETS -> {
+                // Jeśli rzuca gracz, celujemy we wszystkich wrogów, jeśli wróg - w gracza (i ewentualnych sojuszników)
                 for (Actor actor : actorsInCombat) {
-                    if (actor instanceof Enemy) {
+                    if (source instanceof Player && actor instanceof Enemy) {
+                        targets.add(actor);
+                    } else if (source instanceof Enemy && actor instanceof Player) {
                         targets.add(actor);
                     }
                 }
             }
             case RANDOM_TARGET -> {
-                int randomIndex = (int) (Math.random() * actorsInCombat.size());
-                targets.add(actorsInCombat.get(randomIndex));
-                return targets;
+                ArrayList<Actor> potentialTargets = new ArrayList<>();
+                for (Actor actor : actorsInCombat) {
+                    if (source instanceof Player && actor instanceof Enemy) potentialTargets.add(actor);
+                    else if (source instanceof Enemy && actor instanceof Player) potentialTargets.add(actor);
+                }
+                if (!potentialTargets.isEmpty()) {
+                    int randomIndex = (int) (Math.random() * potentialTargets.size());
+                    targets.add(potentialTargets.get(randomIndex));
+                }
             }
-
             case SELF -> {
                 targets.add(source);
-                return targets;
             }
             default -> throw new IllegalStateException("Unexpected value: " + targetType);
-
         }
-        return null;
+        return targets;
     }
 
 
