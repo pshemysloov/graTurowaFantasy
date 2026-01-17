@@ -92,7 +92,7 @@ public class DungeonPanel extends JPanel {
         // Dodanie początkowych przeciwników
         combatHandler.addActor(new Zombie("Zombie1"));
         combatHandler.addActor(new Zombie("Zombie2"));
-        combatHandler.addActor(new Zombie("Zombie3"));
+        //combatHandler.addActor(new Zombie("Zombie3"));
 
         refreshEnemies();
 

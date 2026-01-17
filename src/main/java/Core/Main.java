@@ -21,7 +21,11 @@ public class Main  {
     AuthorsPanel authors;
     AfterLoginPanel afterLogin;
     LoginPanel login;
+    DungeonPanel dungeon;
+    EquipmentPanel equipment;
+
     Player player;
+
 
     static void main() {
         new Main().start();
@@ -209,7 +213,13 @@ public class Main  {
     }
 
     private void OnEkwipunekClicked() {
-        JOptionPane.showMessageDialog(null, "Brak ekwipunku");
+        if (player != null) {
+            equipment = new EquipmentPanel(window, player);
+            window.registerScene("equipment", equipment);
+            window.showScene("equipment");
+        } else {
+            JOptionPane.showMessageDialog(null, "Błąd: Gracz nie jest zalogowany.");
+        }
     }
 
     private void OnWalkaGraczClicked() {
@@ -220,7 +230,7 @@ public class Main  {
         //JOptionPane.showMessageDialog(null, "Walka z komputerem");
         if (player != null) {
             player.resetStatus();
-            DungeonPanel dungeon = new DungeonPanel(window, player);
+            dungeon = new DungeonPanel(window, player);
             window.registerScene("dungeon",dungeon);
             window.showScene("dungeon");
             window.setVisible(true);

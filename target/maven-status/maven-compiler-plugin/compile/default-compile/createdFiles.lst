@@ -14,6 +14,7 @@ Core\Main$1.class
 Core\Skill.class
 Scenes\DungeonPanel.class
 Core\SkillRegister.class
+Scenes\EquipmentPanel.class
 Core\Skills\Attack.class
 Core\TargetType.class
 Core\CombatHandler.class
@@ -30,7 +31,6 @@ Scenes\AppWindow.class
 Core\GameLogger.class
 TCPServer\Packets\LogoutInfo.class
 TCPServer\Packets\TurnInfo.class
-Scenes\EquipmentWindow.class
 Scenes\LoginPanel.class
 Core\Enemy.class
 TCPServer\Global.class
