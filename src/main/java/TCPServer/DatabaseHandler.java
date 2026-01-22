@@ -103,8 +103,8 @@ public class DatabaseHandler {
 
             pstmt.setString(1, login);
             pstmt.setString(2, hashedPassword);
-            // "strength;accuracy;intelligence;willpower;constitution;skill1;skill2;skill3;skill4;level;experience"
-            pstmt.setString(3, "10;10;10;10;10;0;0;0;0;1;0");
+            // "strength;accuracy;intelligence;willpower;constitution;skill1;skill2;skill3;skill4;level;experience;attributePoints"
+            pstmt.setString(3, "10;10;10;10;10;0;0;0;0;1;0;0");
 
             pstmt.executeUpdate();
             System.out.println("[DB HANDLER] Pomyślnie dodano użytkownika do bazy danych");
@@ -200,5 +200,26 @@ public class DatabaseHandler {
         }
     }
 
+    public EquipmentInfoResponse updatePlayerData(EquipmentInfo equipmentInfo) {
+        String sql = "UPDATE users SET player_data = ? WHERE login = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, equipmentInfo.playerData);
+            pstmt.setString(2, equipmentInfo.nickname);
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("[DB HANDLER] Zaktualizowano dane użytkownika: " + equipmentInfo.nickname);
+                return new EquipmentInfoResponse(true,"");
+            } else {
+                System.out.println("[DB HANDLER] Nie znaleziono takiego użytkownika: " + equipmentInfo.nickname);
+                return new EquipmentInfoResponse(false,"Nie znaleziono takiego użytkownika");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("[DB HANDLER] Błąd podczas aktualizacji danych gracza");
+            e.printStackTrace();
+            return new EquipmentInfoResponse(false, "Błąd podczas aktualizacji danych gracza");
+        }
+    }
 
 }

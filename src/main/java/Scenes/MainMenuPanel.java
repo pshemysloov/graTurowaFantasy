@@ -1,4 +1,3 @@
-// java
 package Scenes;
 
 import javax.swing.*;

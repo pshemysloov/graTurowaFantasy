@@ -9,11 +9,11 @@ import java.util.ArrayList;
 public class Zombie extends Enemy {
 
     public Zombie() {
-        super("Zombie",  5, 5, 5, 5, 5, SkillRegister.getSkillById(0), SkillRegister.getSkillById(1), "/goblin.jpg");
+        super("Zombie",  5, 5, 5, 5, 5, SkillRegister.getSkillById(0), SkillRegister.getSkillById(1), 15, "/goblin.jpg");
     }
 
     public Zombie(String name) {
-        super(name,  5, 5, 5, 5, 5, SkillRegister.getSkillById(0), SkillRegister.getSkillById(1), "/goblin.jpg");
+        super(name,  5, 5, 5, 5, 5, SkillRegister.getSkillById(0), SkillRegister.getSkillById(1), 15, "/goblin.jpg");
     }
 
     public String takeTurn(ArrayList<Actor> target){

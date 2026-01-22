@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 public class Attack extends Skill {
 
-
     private Attack() {
         super("Attack", "A basic attack", 5,0, true, TargetType.SINGLE_TARGET);
     }
@@ -25,7 +24,7 @@ public class Attack extends Skill {
         String return_str = "";
         for (Actor actor : target) {
             actor.takeDamage(damage);
-            return_str += user.name + ": zadano" +damage+" obrażeń postaci "+actor.name+"\n";
+            return_str += user.name + ": zadano " +damage+" obrażeń postaci "+actor.name+"\n";
         }
 
         return return_str;

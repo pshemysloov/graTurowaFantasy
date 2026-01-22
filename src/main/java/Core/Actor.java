@@ -1,5 +1,8 @@
 package Core;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 public abstract class Actor {
     public String name;
     public int maxHealth;
@@ -9,6 +12,7 @@ public abstract class Actor {
 
     public Attributes attributes;
 
+    public ArrayList<StatusEffect> activeEffects = new ArrayList<>();
 
     public Actor(String name, int strength, int accuracy, int intelligence, int willpower, int constitution) {
         this.name = name;
@@ -28,5 +32,24 @@ public abstract class Actor {
         this.health = maxHealth;
         this.energy = maxEnergy;
     }
+
+    public void applyEffect(StatusEffect effect) {
+        activeEffects.add(effect);
+        effect.onApply(this);
+    }
+
+    public void processEffects() {
+        Iterator<StatusEffect> it = activeEffects.iterator();
+        while (it.hasNext()) {
+            StatusEffect effect = it.next();
+            effect.onTurnStart(this);
+            effect.duration--;
+            if (effect.duration <= 0) {
+                effect.onRemove(this);
+                it.remove();
+            }
+        }
+    }
+
 
 }

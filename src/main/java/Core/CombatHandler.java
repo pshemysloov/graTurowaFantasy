@@ -11,6 +11,10 @@ public class CombatHandler implements Runnable{
     ArrayList<Actor> actorsInCombat;
     ArrayList<Actor> player;
     private DungeonPanel dungeonPanel;
+    private volatile boolean running = true;
+    private Thread combatThread;
+    public int cumulativeExperience = 0;
+    public int enemiesDefeated = 0;
 
     public CombatHandler(){
         actorsInCombat = new ArrayList<>();
@@ -31,7 +35,15 @@ public class CombatHandler implements Runnable{
 
     @Override
     public void run() {
+        combatThread = Thread.currentThread();
         mainLoop();
+    }
+
+    public void stop() {
+        this.running = false;
+        if (combatThread != null) {
+            combatThread.interrupt();
+        }
     }
 
     private void mainLoop(){
@@ -47,7 +59,7 @@ public class CombatHandler implements Runnable{
         }
 
 
-        while(actorsInCombat.size() > 1){
+        while(actorsInCombat.size() > 1 && running){
             Iterator<Actor> iterator = actorsInCombat.iterator();
             while (iterator.hasNext()) {
                 Actor actor = iterator.next();
@@ -57,6 +69,8 @@ public class CombatHandler implements Runnable{
 
                     // 1. Czy żyje
                     if (enemyActor.health <= 0) {
+                        cumulativeExperience += enemyActor.experienceValue;
+                        enemiesDefeated++;
                         iterator.remove();
                         if (dungeonPanel != null) {
                             SwingUtilities.invokeLater(() -> dungeonPanel.refreshEnemies());
@@ -65,12 +79,23 @@ public class CombatHandler implements Runnable{
                     }
 
                     // 2. Status effects
+                    enemyActor.processEffects();
+
+                    if (enemyActor.health <= 0) {
+                        cumulativeExperience += enemyActor.experienceValue;
+                        enemiesDefeated++;
+                        iterator.remove();
+                        if (dungeonPanel != null) {
+                            SwingUtilities.invokeLater(() -> dungeonPanel.refreshEnemies());
+                        }
+                        continue;
+                    }
 
 
                     // 3. Info
-                    GameLogger.log("Enemy turn: " + enemyActor.name);
-                    GameLogger.log("HP: " + enemyActor.health);
-                    GameLogger.log("Energy: " + enemyActor.energy);
+//                    GameLogger.log("Enemy turn: " + enemyActor.name);
+//                    GameLogger.log("HP: " + enemyActor.health);
+//                    GameLogger.log("Energy: " + enemyActor.energy);
 
                     // 4. Akcja
                     String action_msg = enemyActor.takeTurn(player);
@@ -92,48 +117,55 @@ public class CombatHandler implements Runnable{
                     }
 
                     // 2. Status effects
-                    //playerActor.applyStatusEffects();
+                    playerActor.processEffects();
 
-                    //if (playerActor.health <= 0) {
-                    //    break OuterLoop;
-                    //}
+                    if (playerActor.health <= 0) {
+                        dungeonPanel.handleBattleEnd(false);
+                        return;
+                    }
 
                     // 3. Info
-                    GameLogger.log("Player turn");
-                    GameLogger.log("HP: " + playerActor.health);
-                    GameLogger.log("Energy: " + playerActor.energy);
+//                    GameLogger.log("Player turn");
+//                    GameLogger.log("HP: " + playerActor.health);
+//                    GameLogger.log("Energy: " + playerActor.energy);
 
                     boolean endTurn = false;
 
                     // 4. Wybór skilli
-                    while (!endTurn) {
-                        Skill skill = playerActor.chooseSkill();
+                    while (!endTurn && running) {
+                        try {
+                            Skill skill = playerActor.chooseSkill();
 
-                        if (skill == null) {
-                            GameLogger.log("Niepoprawny wybór (null)");
-                            continue;
-                        }
+                            if (skill == null) {
+                                GameLogger.log("Niepoprawny wybór (null)");
+                                continue;
+                            }
 
-                        if (playerActor.energy < skill.energyCost) {
-                            GameLogger.log("Za mało energii");
-                            continue;
-                        }
+                            if (playerActor.energy < skill.energyCost) {
+                                GameLogger.log("Za mało energii");
+                                continue;
+                            }
 
-                        ArrayList<Actor> targets = selectTargets(
-                                skill.targetType,
-                                playerActor
-                        );
+                            ArrayList<Actor> targets = selectTargets(
+                                    skill.targetType,
+                                    playerActor
+                            );
 
-                        playerActor.energy -= skill.energyCost;
-                        playerActor.energy += skill.energyGain;
-                        String skill_msg = skill.useSkill(playerActor, targets);
-                        GameLogger.log(skill_msg);
+                            playerActor.energy -= skill.energyCost;
+                            playerActor.energy += skill.energyGain;
+                            String skill_msg = skill.useSkill(playerActor, targets);
+                            GameLogger.log(skill_msg);
 
-                        endTurn = skill.endsTurn;
+                            endTurn = skill.endsTurn;
 
-                        // Odśwież UI po każdym użyciu skilla przez gracza
-                        if (dungeonPanel != null) {
-                            SwingUtilities.invokeLater(() -> dungeonPanel.refreshEnemies());
+                            // Odśwież UI po każdym użyciu skilla przez gracza
+                            if (dungeonPanel != null) {
+                                SwingUtilities.invokeLater(() -> dungeonPanel.refreshEnemies());
+                            }
+                        } catch (Exception e) {
+                            if (e instanceof InterruptedException || !running) {
+                                return;
+                            }
                         }
                     }
                 }
@@ -144,9 +176,10 @@ public class CombatHandler implements Runnable{
             }
         }
 
-        GameLogger.log("Wygrana!");
-        dungeonPanel.handleBattleEnd(true);
-
+        if (running) {
+            GameLogger.log("Wygrana!");
+            dungeonPanel.handleBattleEnd(true);
+        }
     }
 
     private ArrayList<Actor> selectTargets(TargetType targetType, Actor source) {

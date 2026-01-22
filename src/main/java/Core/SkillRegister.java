@@ -5,7 +5,8 @@ import Core.Skills.*;
 
 public enum SkillRegister {
     ATTACK(0, Attack.getInstance()),
-    HEAL(1, Heal.getInstance())
+    HEAL(1, Heal.getInstance()),
+    BLEED_ATTACK(2, BleedAttack.getInstance())
     ;
 
 
@@ -28,4 +29,15 @@ public enum SkillRegister {
         }
         return null;
     }
+
+    public static int getIdBySkill(Skill skill) {
+        if (skill == null) return -1; // wartość oznaczająca brak skilla
+        for (SkillRegister register : SkillRegister.values()) {
+            if (register.getSkill() == skill) {
+                return register.getId();
+            }
+        }
+        return -1;
+    }
+
 }

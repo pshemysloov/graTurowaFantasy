@@ -5,11 +5,12 @@ public class Player extends Actor{
     public Skill[] skills = new Skill[4];
     public int level;
     public int experience;
+    public int attributePoints;
 
     private Skill selectedSkill;
     private Actor selectedTarget;
 
-    public Player(String name, int strength, int accuracy, int intelligence, int willpower, int constitution, Skill skill1, Skill skill2, Skill skill3, Skill skill4, int level, int experience) {
+    public Player(String name, int strength, int accuracy, int intelligence, int willpower, int constitution, Skill skill1, Skill skill2, Skill skill3, Skill skill4, int level, int experience, int attributePoints) {
         super(name, strength, accuracy, intelligence, willpower, constitution);
         skills[0] = skill1;
         skills[1] = skill2;
@@ -17,17 +18,19 @@ public class Player extends Actor{
         skills[3] = skill4;
         this.level = level;
         this.experience = experience;
+        this.attributePoints = attributePoints;
     }
 
 
     public synchronized Skill chooseSkill() {
         selectedSkill = null;
-        try {
-            while (selectedSkill == null) {
+        while (selectedSkill == null) {
+            try {
                 wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return null;
             }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
         }
         return selectedSkill;
     }
@@ -39,12 +42,13 @@ public class Player extends Actor{
 
     public synchronized Actor chooseTarget() {
         selectedTarget = null;
-        try {
-            while (selectedTarget == null) {
+        while (selectedTarget == null) {
+            try {
                 wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return null;
             }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
         }
         return selectedTarget;
     }
@@ -52,6 +56,10 @@ public class Player extends Actor{
     public synchronized void setSelectedTarget(Actor target) {
         this.selectedTarget = target;
         notifyAll();
+    }
+
+    public void addExperience(int exp){
+        experience += exp;
     }
 
 }

@@ -72,7 +72,6 @@ public class Server {
                         // informacje o połączeniu z klientem
                         ClientConnection client = new ClientConnection(socket, oos, ois);
 
-                        // tworzenie nowego wątku do obsługi rejestracji
                         Thread registerThread = new Thread(() -> {
                             try {
                                 handleRegisterInfo((RegisterInfo) obj, client);
@@ -89,12 +88,25 @@ public class Server {
                                 handleLogoutInfo((LogoutInfo) obj);
                             } catch (IOException e) {
                                 e.printStackTrace();
-                                throw new RuntimeException(e);
+                                //throw new RuntimeException(e);
                             }
 
                         });
                         logoutThread.start();
 
+                    } else if (obj instanceof EquipmentInfo) {
+                        // informacje o połączeniu z klientem
+                        ClientConnection client = new ClientConnection(socket, oos, ois);
+
+                        Thread equipmentThread = new Thread(() -> {
+                            try{
+                                handleEquipmentInfo((EquipmentInfo) obj, client);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                //throw new RuntimeException(e);
+                            }
+                        });
+                        equipmentThread.start();
                     }
 
                 } catch (Exception e) {
@@ -124,6 +136,13 @@ public class Server {
 
     private void handleLogoutInfo(LogoutInfo info) throws IOException {
         dbHandler.logoutUser(info.nickname);
+    }
+
+    private void handleEquipmentInfo(EquipmentInfo info, ClientConnection client) throws IOException {
+        EquipmentInfoResponse response = dbHandler.updatePlayerData(info);
+        client.oos.writeObject(response);
+        client.oos.flush();
+
     }
 
 }

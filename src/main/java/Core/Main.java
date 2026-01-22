@@ -4,10 +4,7 @@ import Scenes.*;
 
 import javax.swing.*;
 import TCPServer.*;
-import TCPServer.Packets.LoginInfo;
-import TCPServer.Packets.LoginInfoResponse;
-import TCPServer.Packets.RegisterInfo;
-import TCPServer.Packets.RegisterResponse;
+import TCPServer.Packets.*;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -188,12 +185,12 @@ public class Main  {
             }
         }
 
-        if (stats.size() != 11) {
+        if (stats.size() != 12) {
             System.err.println("Nieprawidłowa liczba statystyk otrzymanych z serwera");
             return null;
         }
 
-        // stats: 0:str, 1:acc, 2:int, 3:will, 4:const, 5-8:skill_ids, 9:level, 10:exp
+        // stats: 0:str, 1:acc, 2:int, 3:will, 4:const, 5-8:skill_ids, 9:level, 10:exp, 11:attribute_points
         return new Player(
                 response.nickname,
                 stats.get(0), // strength
@@ -206,7 +203,8 @@ public class Main  {
                 SkillRegister.getSkillById(stats.get(7)), // skill3
                 SkillRegister.getSkillById(stats.get(8)), // skill4
                 stats.get(9), // level
-                stats.get(10) // experience
+                stats.get(10), // experience
+                stats.get(11) // attribute points
         );
 
 
@@ -214,7 +212,7 @@ public class Main  {
 
     private void OnEkwipunekClicked() {
         if (player != null) {
-            equipment = new EquipmentPanel(window, player);
+            equipment = new EquipmentPanel(window, player, this::synchronizePlayerDataWithServer);
             window.registerScene("equipment", equipment);
             window.showScene("equipment");
         } else {
@@ -230,7 +228,7 @@ public class Main  {
         //JOptionPane.showMessageDialog(null, "Walka z komputerem");
         if (player != null) {
             player.resetStatus();
-            dungeon = new DungeonPanel(window, player);
+            dungeon = new DungeonPanel(window, player, this::synchronizePlayerDataWithServer);
             window.registerScene("dungeon",dungeon);
             window.showScene("dungeon");
             window.setVisible(true);
@@ -256,6 +254,25 @@ public class Main  {
             }
         }
         System.exit(0);
+    }
+
+    private void synchronizePlayerDataWithServer(){
+        if (player == null) return;
+
+        ClientToServerHandler handler = new ClientToServerHandler();
+        EquipmentInfoResponse response = handler.sendEquipmentInfo(player);
+
+        if(response == null){
+            JOptionPane.showMessageDialog(null, "Nie otrzymano odpowiedzi od serwera");
+        }
+
+        else if(!response.success){
+            JOptionPane.showMessageDialog(null,response.message);
+        }
+
+        else {
+            System.out.println("Zsynchronizowano dane z serwerem");
+        }
     }
 
 }

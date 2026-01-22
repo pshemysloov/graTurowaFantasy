@@ -1,4 +1,3 @@
-// java
 package Scenes;
 
 import Core.*;
@@ -17,11 +16,50 @@ public class DungeonPanel extends JPanel {
     private final JTextField hpField = new JTextField();
     private final JTextField energyField = new JTextField();
     private final CombatHandler combatHandler;
+    private final Player player;
+    private final long startTime;
+    private final Runnable onBattleEndFinished; // funkcja synchronizująca dane gracza z serwerem przekazywana do GameEndPanel
 
-    public DungeonPanel(AppWindow window, Player player) {
+    public DungeonPanel(AppWindow window, Player player, Runnable onBattleEndFinished) {
         this.window = window;
+        this.player = player;
+        this.onBattleEndFinished = onBattleEndFinished;
+        this.startTime = System.currentTimeMillis();
+
+        // 1. Inicjalizacja muzyki na początku (żeby przyciski mogły jej użyć)
+        musicPlayer = new MusicPlayer();
+        loadMusic(musicPlayer);
 
         setLayout(new BorderLayout(10, 10));
+
+        //Górny panel z opcjami ---
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        topPanel.setOpaque(false);
+
+        // Przycisk Muzyki
+        JButton musicBtn = new JButton("Wycisz");
+        musicBtn.setFocusable(false);
+        musicBtn.addActionListener(e -> {
+            if (musicPlayer.isPlaying()) {
+                musicPlayer.pauseMusic();
+                musicBtn.setText("Włącz muzykę");
+            } else {
+                musicPlayer.resumeMusic();
+                musicBtn.setText("Wycisz");
+            }
+        });
+
+        // Przycisk Wyjścia
+        JButton exitBtn = new JButton("Wyjście");
+        exitBtn.setFocusable(false);
+        exitBtn.addActionListener(e -> {
+            handleBattleEnd(false);
+        });
+
+        topPanel.add(musicBtn);
+        topPanel.add(exitBtn);
+        add(topPanel, BorderLayout.NORTH);
+
 
         // Panel środkowy podzielony na lewo (przeciwnicy) i prawo (gracz)
         JPanel battlePanel = new JPanel(new GridLayout(1, 2, 10, 10));
@@ -52,7 +90,8 @@ public class DungeonPanel extends JPanel {
             if (skill != null) {
                 JButton skillBtn = new JButton(skill.name);
                 skillBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-                skillBtn.addActionListener(_ -> player.setSelectedSkill(skill));
+                // Używamy składni 'e ->' dla kompatybilności
+                skillBtn.addActionListener(e -> player.setSelectedSkill(skill));
                 rightPanel.add(skillBtn);
                 rightPanel.add(Box.createVerticalStrut(5));
             }
@@ -62,10 +101,8 @@ public class DungeonPanel extends JPanel {
         battlePanel.add(rightPanel);
         add(battlePanel, BorderLayout.CENTER);
 
-        musicPlayer = new MusicPlayer();
-        loadMusic(musicPlayer);
 
-
+        // Panel Logów (Dół)
         JPanel logPanel = new JPanel(new BorderLayout());
         logPanel.setPreferredSize(new Dimension(0, 180));
 
@@ -123,7 +160,8 @@ public class DungeonPanel extends JPanel {
 
                 JButton enemyBtn = new JButton(e.name);
                 enemyBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-                enemyBtn.addActionListener(_ -> {
+                // Używamy składni 'e ->' lub '_' w zależności od wersji Javy
+                enemyBtn.addActionListener(e_evt -> {
                     // Znajdź gracza w walce i ustaw mu cel
                     for(Actor a : combatHandler.getActorsInCombat()) {
                         if(a instanceof Player) {
@@ -168,15 +206,29 @@ public class DungeonPanel extends JPanel {
     }
 
     public void handleBattleEnd(boolean victory) {
-        if(victory){
-            JOptionPane.showMessageDialog(this, "Wygrana!");
-        } else  {
-            JOptionPane.showMessageDialog(this, "Przegrana!");
+        int experience = 0;
+        int enemiesDefeated = 0;
+        if (combatHandler != null) {
+            experience = combatHandler.cumulativeExperience;
+            enemiesDefeated = combatHandler.enemiesDefeated;
+            combatHandler.stop(); // Sygnał do zatrzymania wątku
         }
+
+        long endTime = System.currentTimeMillis();
+        long durationSeconds = (endTime - startTime) / 1000;
+
+        if(victory){
+            player.addExperience(experience);
+        } else {
+            // W przypadku porażki gracz nie zdobywa doświadczenia
+            // zerowane dla GameEndPanel
+            experience = 0;
+        }
+
         musicPlayer.stopMusic();
-        window.showScene("afterlogin");
-        window.setVisible(true);
 
-
+        GameEndPanel endPanel = new GameEndPanel(window, player, victory, enemiesDefeated, durationSeconds, experience, onBattleEndFinished);
+        window.registerScene("gameend", endPanel);
+        window.showScene("gameend");
     }
 }

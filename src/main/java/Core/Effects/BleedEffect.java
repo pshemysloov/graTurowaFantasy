@@ -1,0 +1,24 @@
+package Core.Effects;
+
+import Core.Actor;
+import Core.GameLogger;
+import Core.StatusEffect;
+
+
+public class BleedEffect extends StatusEffect {
+    int multiplier;
+
+    public BleedEffect(int duration, int multiplier) {
+        super("Krwawienie", duration);
+        this.multiplier = multiplier;
+    }
+
+    @Override
+    public void onTurnStart(Actor owner) {
+        int damage = (int)(owner.maxHealth * multiplier * 0.05);
+        owner.takeDamage(damage);
+        GameLogger.log(owner.name + " krwawi i traci " + damage);
+    }
+}
+
+
