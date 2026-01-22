@@ -39,7 +39,7 @@ public class DungeonPanel extends JPanel {
         // Przycisk Muzyki
         JButton musicBtn = new JButton("Wycisz");
         musicBtn.setFocusable(false);
-        musicBtn.addActionListener(e -> {
+        musicBtn.addActionListener(_ -> {
             if (musicPlayer.isPlaying()) {
                 musicPlayer.pauseMusic();
                 musicBtn.setText("Włącz muzykę");
@@ -52,9 +52,7 @@ public class DungeonPanel extends JPanel {
         // Przycisk Wyjścia
         JButton exitBtn = new JButton("Wyjście");
         exitBtn.setFocusable(false);
-        exitBtn.addActionListener(e -> {
-            handleBattleEnd(false);
-        });
+        exitBtn.addActionListener(_ -> handleBattleEnd(false));
 
         topPanel.add(musicBtn);
         topPanel.add(exitBtn);
@@ -91,7 +89,7 @@ public class DungeonPanel extends JPanel {
                 JButton skillBtn = new JButton(skill.name);
                 skillBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
                 // Używamy składni 'e ->' dla kompatybilności
-                skillBtn.addActionListener(e -> player.setSelectedSkill(skill));
+                skillBtn.addActionListener(_ -> player.setSelectedSkill(skill));
                 rightPanel.add(skillBtn);
                 rightPanel.add(Box.createVerticalStrut(5));
             }
@@ -161,7 +159,7 @@ public class DungeonPanel extends JPanel {
                 JButton enemyBtn = new JButton(e.name);
                 enemyBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
                 // Używamy składni 'e ->' lub '_' w zależności od wersji Javy
-                enemyBtn.addActionListener(e_evt -> {
+                enemyBtn.addActionListener(_ -> {
                     // Znajdź gracza w walce i ustaw mu cel
                     for(Actor a : combatHandler.getActorsInCombat()) {
                         if(a instanceof Player) {

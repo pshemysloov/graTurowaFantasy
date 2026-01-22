@@ -43,7 +43,7 @@ public class Server {
                         String code = (String) obj;
                         Session.PlayerConnection conn = new Session.PlayerConnection(socket, oos, ois);
 
-                        sessions.compute(code, (k, session) -> {
+                        sessions.compute(code, (_, session) -> {
                             if (session == null) {
                                 session = new Session(code);
                                 session.addPlayer(conn);

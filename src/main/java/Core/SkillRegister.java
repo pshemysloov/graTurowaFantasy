@@ -1,6 +1,5 @@
 package Core;
 
-import Core.Skill;
 import Core.Skills.*;
 
 public enum SkillRegister {

@@ -80,24 +80,20 @@ public class ClientToServerHandler {
              ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
 
-            // "strength;accuracy;intelligence;willpower;constitution;skill1;skill2;skill3;skill4;level;experience"
-            StringBuilder sb = new StringBuilder();
+            // "strength;accuracy;intelligence;willpower;constitution;skill1;skill2;skill3;skill4;level;experience;attributePoints"
 
-            sb
-            .append(player.attributes.strength).append(";")
-            .append(player.attributes.accuracy).append(";")
-            .append(player.attributes.intelligence).append(";")
-            .append(player.attributes.willpower).append(";")
-            .append(player.attributes.constitution).append(";")
-            .append(SkillRegister.getIdBySkill(player.skills[0])).append(";")
-            .append(SkillRegister.getIdBySkill(player.skills[1])).append(";")
-            .append(SkillRegister.getIdBySkill(player.skills[2])).append(";")
-            .append(SkillRegister.getIdBySkill(player.skills[3])).append(";")
-            .append(player.level).append(";")
-            .append(player.experience).append(";")
-            .append(player.attributePoints);
-
-            String playerData = sb.toString();
+            String playerData = player.attributes.strength + ";" +
+                    player.attributes.accuracy + ";" +
+                    player.attributes.intelligence + ";" +
+                    player.attributes.willpower + ";" +
+                    player.attributes.constitution + ";" +
+                    SkillRegister.getIdBySkill(player.skills[0]) + ";" +
+                    SkillRegister.getIdBySkill(player.skills[1]) + ";" +
+                    SkillRegister.getIdBySkill(player.skills[2]) + ";" +
+                    SkillRegister.getIdBySkill(player.skills[3]) + ";" +
+                    player.level + ";" +
+                    player.experience + ";" +
+                    player.attributePoints;
 
             oos.writeObject(new EquipmentInfo(playerData, player.name));
             oos.flush();

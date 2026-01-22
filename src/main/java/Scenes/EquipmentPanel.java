@@ -6,16 +6,16 @@ import javax.swing.*;
 import java.awt.*;
 
 public class EquipmentPanel extends JPanel {
-    private AppWindow window;
-    private Player player;
-    private EquipmentHandler equipmentHandler;
-    private PlayerLevelHandler playerLevelHandler;
+    private final AppWindow window;
+    private final Player player;
+    private final EquipmentHandler equipmentHandler;
+    private final PlayerLevelHandler playerLevelHandler;
     private JLabel pointsLabel;
     private JLabel levelLabel;
     private JProgressBar expBar;
     private Skill selectedSkillToAssign = null;
     private JPanel rightPanel;
-    private Runnable onSaveEquipmentClicked;
+    private final Runnable onSaveEquipmentClicked;
 
     public EquipmentPanel(AppWindow window, Player player, Runnable onSaveEquipmentClicked) {
         this.window = window;
@@ -91,7 +91,7 @@ public class EquipmentPanel extends JPanel {
             slotBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
             slotBtn.setMaximumSize(new Dimension(250, 30));
 
-            slotBtn.addActionListener(e -> {
+            slotBtn.addActionListener(_ -> {
                 if (selectedSkillToAssign != null) {
                     equipmentHandler.assignSkillToSlot(selectedSkillToAssign, slotIndex);
                     selectedSkillToAssign = null;
@@ -141,7 +141,7 @@ public class EquipmentPanel extends JPanel {
 
         JButton btnMinus = new JButton("-");
         btnMinus.setMargin(new Insets(0, 5, 0, 5));
-        btnMinus.addActionListener(e -> {
+        btnMinus.addActionListener(_ -> {
             if (equipmentHandler.subtractAttribute(attrName)) {
                 refreshUI(valLabel, attrName);
             }
@@ -149,7 +149,7 @@ public class EquipmentPanel extends JPanel {
 
         JButton btnPlus = new JButton("+");
         btnPlus.setMargin(new Insets(0, 5, 0, 5));
-        btnPlus.addActionListener(e -> {
+        btnPlus.addActionListener(_ -> {
             if (equipmentHandler.addAttribute(attrName)) {
                 refreshUI(valLabel, attrName);
             }
@@ -218,7 +218,7 @@ public class EquipmentPanel extends JPanel {
                 skillBtn.setForeground(Color.YELLOW);
             }
 
-            skillBtn.addActionListener(e -> {
+            skillBtn.addActionListener(_ -> {
                 selectedSkillToAssign = skill;
                 refreshRightPanel();
             });
@@ -239,9 +239,7 @@ public class EquipmentPanel extends JPanel {
         saveBtn.setBackground(new Color(50, 100, 50));
         saveBtn.setForeground(Color.WHITE);
         saveBtn.setPreferredSize(new Dimension(0, 50));
-        saveBtn.addActionListener(e -> {
-            onSaveEquipmentClicked.run();
-        });
+        saveBtn.addActionListener(_ -> onSaveEquipmentClicked.run());
         rightPanel.add(saveBtn, BorderLayout.SOUTH);
 
         return rightPanel;

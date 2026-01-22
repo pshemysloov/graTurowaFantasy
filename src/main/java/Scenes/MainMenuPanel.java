@@ -24,11 +24,11 @@ public class MainMenuPanel extends JPanel {
         JButton btnAuthors = createButton("Autorzy");
         JButton btnExit = createButton("Wyjście");
 
-        btnLogin.addActionListener(e -> { if (onLogin != null) onLogin.run(); });
-        btnCreateAccount.addActionListener(e -> { if (onCreateAccount != null) onCreateAccount.run(); });
-        btnOptions.addActionListener(e -> { if (onOptions != null) onOptions.run(); });
-        btnAuthors.addActionListener(e -> { if (onAuthors != null) onAuthors.run(); });
-        btnExit.addActionListener(e -> { if (onExit != null) onExit.run(); });
+        btnLogin.addActionListener(_ -> { if (onLogin != null) onLogin.run(); });
+        btnCreateAccount.addActionListener(_ -> { if (onCreateAccount != null) onCreateAccount.run(); });
+        btnOptions.addActionListener(_ -> { if (onOptions != null) onOptions.run(); });
+        btnAuthors.addActionListener(_ -> { if (onAuthors != null) onAuthors.run(); });
+        btnExit.addActionListener(_ -> { if (onExit != null) onExit.run(); });
 
         center.add(Box.createVerticalGlue());
         center.add(btnLogin);

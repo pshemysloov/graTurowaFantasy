@@ -9,7 +9,7 @@ import java.awt.*;
 public class GameEndPanel extends JPanel {
     private final AppWindow window;
     private final Player player;
-    private Runnable onMainMenuClicked;
+    private final Runnable onMainMenuClicked;
 
     public GameEndPanel(AppWindow window, Player player, boolean victory, int enemiesDefeated, long timeInSeconds, int expGained, Runnable onMainMenuClicked) {
         this.window = window;
@@ -73,7 +73,7 @@ public class GameEndPanel extends JPanel {
         JButton btnMenu = new JButton("Powrót do menu");
         btnMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnMenu.setPreferredSize(new Dimension(200, 40));
-        btnMenu.addActionListener(e -> {goBackToMainMenu();});
+        btnMenu.addActionListener(_ -> goBackToMainMenu());
         content.add(btnMenu);
 
         add(content, BorderLayout.CENTER);
