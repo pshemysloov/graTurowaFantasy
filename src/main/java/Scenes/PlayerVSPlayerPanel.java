@@ -4,8 +4,10 @@ import Core.*;
 import Core.Enemies.Zombie;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.io.InputStream;
+import java.net.URL;
 
 public class PlayerVSPlayerPanel extends JPanel {
     private final AppWindow window;
@@ -13,31 +15,44 @@ public class PlayerVSPlayerPanel extends JPanel {
     private final MusicPlayer musicPlayer;
     private final JPanel leftPanel = new JPanel();
     private final JPanel rightPanel = new JPanel();
-    private final JTextField hpField = new JTextField();
-    private final JTextField energyField = new JTextField();
+
+    private final JProgressBar hpBar = new JProgressBar();
+    private final JProgressBar energyBar = new JProgressBar();
+
     private final PVPCombatHandler combatHandler;
     private final Player player;
     private final long startTime;
+    private Image backgroundImage;
 
+    /**
+     * Inicjalizuje panel walki PVP, nawiązuje połączenie sieciowe poprzez CombatHandlera
+     * i ustawia elementy interfejsu graficznego.
+     */
     public PlayerVSPlayerPanel(AppWindow window, Player player, String sessionCode) {
         this.window = window;
         this.player = player;
-        //this.onBattleEndFinished = onBattleEndFinished;
         this.startTime = System.currentTimeMillis();
 
-        // 1. Inicjalizacja muzyki na początku (żeby przyciski mogły jej użyć)
+        // Ładowanie tła
+        try {
+            URL bgUrl = getClass().getResource("/background.gif");
+            if (bgUrl != null) {
+                backgroundImage = new ImageIcon(bgUrl).getImage();
+            }
+        } catch (Exception e) {
+            System.err.println("Nie udało się załadować tła.");
+        }
+
         musicPlayer = new MusicPlayer();
         loadMusic(musicPlayer);
 
         setLayout(new BorderLayout(10, 10));
 
-        //Górny panel z opcjami ---
+        // Konfiguracja panelu górnego
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         topPanel.setOpaque(false);
 
-        // Przycisk Muzyki
-        JButton musicBtn = new JButton("Wycisz");
-        musicBtn.setFocusable(false);
+        JButton musicBtn = createStyledButton("Wycisz");
         musicBtn.addActionListener(_ -> {
             if (musicPlayer.isPlaying()) {
                 musicPlayer.pauseMusic();
@@ -48,9 +63,7 @@ public class PlayerVSPlayerPanel extends JPanel {
             }
         });
 
-        // Przycisk Wyjścia
-        JButton exitBtn = new JButton("Wyjście");
-        exitBtn.setFocusable(false);
+        JButton exitBtn = createStyledButton("Wyjście");
         exitBtn.addActionListener(_ -> handleBattleEnd(false));
 
         topPanel.add(musicBtn);
@@ -58,70 +71,107 @@ public class PlayerVSPlayerPanel extends JPanel {
         add(topPanel, BorderLayout.NORTH);
 
 
-        // Panel środkowy podzielony na lewo (przeciwnicy) i prawo (gracz)
-        JPanel battlePanel = new JPanel(new GridLayout(1, 2, 10, 10));
+        // Konfiguracja panelu środkowego (pole bitwy)
+        JPanel battlePanel = new JPanel(new GridLayout(1, 2, 20, 10));
+        battlePanel.setOpaque(false);
+        battlePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        leftPanel.setLayout(new FlowLayout());
-        leftPanel.setBorder(BorderFactory.createTitledBorder("Przeciwnicy"));
+        // Panel lewy: Przeciwnik sieciowy
+        leftPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        leftPanel.setOpaque(false);
+        leftPanel.setBorder(createTitledBorder("Przeciwnik"));
 
+        // Panel prawy: Statystyki lokalnego gracza
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.setBorder(BorderFactory.createTitledBorder("Gracz: " + player.name));
+        rightPanel.setOpaque(false);
+        rightPanel.setBorder(createTitledBorder("Gracz: " + player.name));
 
-        // Statystyki gracza
-        JPanel statsPanel = new JPanel(new GridLayout(2, 2, 5, 5));
-        statsPanel.add(new JLabel("HP:"));
-        hpField.setEditable(false);
-        hpField.setText(player.health + "/" + player.maxHealth);
-        statsPanel.add(hpField);
+        // Panel statystyk
+        JPanel statsPanel = new JPanel();
+        statsPanel.setLayout(new BoxLayout(statsPanel, BoxLayout.Y_AXIS));
+        statsPanel.setOpaque(false);
+        statsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        statsPanel.add(new JLabel("Energia:"));
-        energyField.setEditable(false);
-        energyField.setText(player.energy + "/" + player.maxEnergy);
-        statsPanel.add(energyField);
+        hpBar.setStringPainted(true);
+        hpBar.setForeground(new Color(200, 50, 50));
+        hpBar.setBackground(new Color(50, 0, 0));
+        hpBar.setMaximum(player.maxHealth);
+        hpBar.setValue(player.health);
+        hpBar.setFont(new Font("SansSerif", Font.BOLD, 12));
+
+        energyBar.setStringPainted(true);
+        energyBar.setForeground(new Color(50, 100, 200));
+        energyBar.setBackground(new Color(0, 0, 50));
+        energyBar.setMaximum(player.maxEnergy);
+        energyBar.setValue(player.energy);
+        energyBar.setFont(new Font("SansSerif", Font.BOLD, 12));
+
+        JLabel hpLabel = new JLabel("Zdrowie:");
+        hpLabel.setForeground(Color.WHITE);
+        hpLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel enLabel = new JLabel("Energia:");
+        enLabel.setForeground(Color.WHITE);
+        enLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        statsPanel.add(hpLabel);
+        statsPanel.add(hpBar);
+        statsPanel.add(Box.createVerticalStrut(10));
+        statsPanel.add(enLabel);
+        statsPanel.add(energyBar);
 
         rightPanel.add(statsPanel);
-        rightPanel.add(Box.createVerticalStrut(10));
+        rightPanel.add(Box.createVerticalStrut(20));
 
-        // Przyciski umiejętności
+        // Panel umiejętności
+        JPanel skillsContainer = new JPanel(new GridLayout(0, 1, 5, 5));
+        skillsContainer.setOpaque(false);
+        skillsContainer.setMaximumSize(new Dimension(300, 200));
+
         for (Skill skill : player.skills) {
             if (skill != null) {
-                JButton skillBtn = new JButton(skill.name);
-                skillBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-                // Używamy składni 'e ->' dla kompatybilności
+                JButton skillBtn = createStyledButton(skill.name);
+                skillBtn.setToolTipText("Koszt: " + skill.energyCost);
                 skillBtn.addActionListener(_ -> player.setSelectedSkill(skill));
-                rightPanel.add(skillBtn);
-                rightPanel.add(Box.createVerticalStrut(5));
+                skillsContainer.add(skillBtn);
             }
         }
+        rightPanel.add(skillsContainer);
 
         battlePanel.add(leftPanel);
         battlePanel.add(rightPanel);
         add(battlePanel, BorderLayout.CENTER);
 
 
-        // Panel Logów (Dół)
+        // Panel logów
         JPanel logPanel = new JPanel(new BorderLayout());
+        logPanel.setOpaque(false);
         logPanel.setPreferredSize(new Dimension(0, 180));
+        logPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         logArea = new JTextArea();
         logArea.setEditable(false);
-        logArea.setBackground(new Color(30, 30, 40));
-        logArea.setForeground(new Color(200, 200, 200));
-        logArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        logArea.setBackground(new Color(0, 0, 0, 180));
+        logArea.setForeground(new Color(220, 220, 220));
+        logArea.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        logArea.setLineWrap(true);
+        logArea.setWrapStyleWord(true);
 
         JScrollPane scrollPane = new JScrollPane(logArea);
-        scrollPane.setBorder(BorderFactory.createTitledBorder("Dziennik Walki"));
+        scrollPane.setBorder(createTitledBorder("Dziennik Walki"));
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+
         logPanel.add(scrollPane, BorderLayout.CENTER);
         add(logPanel, BorderLayout.SOUTH);
 
         GameLogger.setLogArea(logArea);
+        GameLogger.log("=== TRYB PVP ===");
+        GameLogger.log("Kod sesji: " + sessionCode);
 
-
-        GameLogger.log("=== Witaj w grze turowej! ===");
-
+        // Uruchomienie obsługi sieciowej
         combatHandler = new PVPCombatHandler(player, sessionCode);
         combatHandler.setPvpPanel(this);
-
 
         refreshEnemies();
 
@@ -129,33 +179,79 @@ public class PlayerVSPlayerPanel extends JPanel {
         combatThread.start();
     }
 
-    public void refreshEnemies() {
-        // 1. Znajdź gracza i odśwież jego statystyki w rightPanel
+    /**
+     * Rysuje obraz tła na panelu.
+     */
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
 
+    /**
+     * Tworzy spersonalizowane obramowanie z tytułem.
+     */
+    private TitledBorder createTitledBorder(String title) {
+        TitledBorder border = BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(new Color(100, 100, 120), 2),
+                title
+        );
+        border.setTitleColor(Color.WHITE);
+        border.setTitleFont(new Font("Serif", Font.BOLD, 16));
+        border.setTitleJustification(TitledBorder.CENTER);
+        return border;
+    }
+
+    /**
+     * Tworzy przycisk zdefiniowany w stylu graficznym aplikacji.
+     */
+    private JButton createStyledButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setFocusable(false);
+        btn.setFont(new Font("SansSerif", Font.BOLD, 14));
+        btn.setBackground(new Color(60, 60, 70));
+        btn.setForeground(Color.WHITE);
+        btn.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(20, 20, 30), 1),
+                BorderFactory.createEmptyBorder(5, 15, 5, 15)
+        ));
+        return btn;
+    }
+
+    /**
+     * Synchronizuje widok z aktualnym stanem obiektów walczących (HP, energia, nazwy).
+     */
+    public void refreshEnemies() {
+        // Aktualizacja statystyk lokalnego gracza
         for (Actor actor : combatHandler.getActorsInCombat()) {
             if (actor instanceof Player) {
-                hpField.setText(actor.health + "/" + actor.maxHealth);
-                energyField.setText(actor.energy + "/" + actor.maxEnergy);
+                hpBar.setMaximum(actor.maxHealth);
+                hpBar.setValue(actor.health);
+                hpBar.setString(actor.health + "/" + actor.maxHealth);
+
+                energyBar.setMaximum(actor.maxEnergy);
+                energyBar.setValue(actor.energy);
+                energyBar.setString(actor.energy + "/" + actor.maxEnergy);
                 break;
             }
         }
 
-
-
-
-        // 2. Odśwież listę przeciwników w leftPanel
+        // Aktualizacja widoku przeciwnika
         leftPanel.removeAll();
-
         for (Actor actor : combatHandler.getActorsInCombat()) {
-
             if (actor != player) {
-
                 JPanel enemyUnitPanel = new JPanel();
                 enemyUnitPanel.setLayout(new BoxLayout(enemyUnitPanel, BoxLayout.Y_AXIS));
                 enemyUnitPanel.setOpaque(false);
+                enemyUnitPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
                 JButton enemyBtn = new JButton(actor.name);
                 enemyBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+                enemyBtn.setBackground(new Color(80, 40, 40));
+                enemyBtn.setForeground(Color.WHITE);
+                enemyBtn.setFocusable(false);
 
                 enemyBtn.addActionListener(_ -> {
                     player.setSelectedTarget(actor);
@@ -166,32 +262,38 @@ public class PlayerVSPlayerPanel extends JPanel {
                     if (e.spritePath != null) {
                         try {
                             ImageIcon icon = new ImageIcon(getClass().getResource(e.spritePath));
-                            Image img = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+                            Image img = icon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
                             enemyBtn.setIcon(new ImageIcon(img));
+                            enemyBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
+                            enemyBtn.setHorizontalTextPosition(SwingConstants.CENTER);
                         } catch (Exception ex) {
-                            // Ignoruj błąd grafiki
                             System.err.println("Błąd ładowania grafiki: " + e.spritePath);
                         }
                     }
                 }
 
-                JLabel hpLabel = new JLabel("HP: " + actor.health + "/" + actor.maxHealth);
-                hpLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-                hpLabel.setForeground(Color.BLACK);
+                JProgressBar enemyHpBar = new JProgressBar(0, actor.maxHealth);
+                enemyHpBar.setValue(actor.health);
+                enemyHpBar.setString(actor.health + "/" + actor.maxHealth);
+                enemyHpBar.setStringPainted(true);
+                enemyHpBar.setForeground(Color.RED);
+                enemyHpBar.setPreferredSize(new Dimension(120, 20));
+                enemyHpBar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
                 enemyUnitPanel.add(enemyBtn);
                 enemyUnitPanel.add(Box.createVerticalStrut(5));
-                enemyUnitPanel.add(hpLabel);
+                enemyUnitPanel.add(enemyHpBar);
 
                 leftPanel.add(enemyUnitPanel);
             }
         }
-
-
         leftPanel.revalidate();
         leftPanel.repaint();
     }
 
+    /**
+     * Wczytuje plik dźwiękowy z zasobów.
+     */
     private void loadMusic(MusicPlayer mp) {
         InputStream musicStream = Main.class.getResourceAsStream("/music.wav");
         if (musicStream != null) {
@@ -200,25 +302,21 @@ public class PlayerVSPlayerPanel extends JPanel {
         }
     }
 
+    /**
+     * Kończy rozgrywkę PVP, rozłącza sesję sieciową i wyświetla ekran końcowy.
+     */
     public void handleBattleEnd(boolean victory) {
         long endTime = System.currentTimeMillis();
         long durationSeconds = (endTime - startTime) / 1000;
 
         int experience = 0;
-        int enemiesDefeated = 0;
-        if (victory) {
-            enemiesDefeated = 1;
-        }
+        int enemiesDefeated = victory ? 1 : 0;
 
-        // metoda dla gameEndPanel
         Runnable onBattleEndFinished = () -> {
-            // Powrót do panelu głównego gry
-            window.showScene("menu");
+            window.showScene("afterlogin");
         };
 
         musicPlayer.stopMusic();
-
-        // Zamknij połączenie sieciowe (wyślij sygnał końca do przeciwnika)
         if (combatHandler != null) {
             combatHandler.disconnect();
         }

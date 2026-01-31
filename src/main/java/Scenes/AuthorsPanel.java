@@ -5,45 +5,51 @@ import java.awt.*;
 
 public class AuthorsPanel extends JPanel {
     public AuthorsPanel(AppWindow window) {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        // Używamy BorderLayout, aby TopBar był na górze, a treść w centrum
+        setLayout(new BorderLayout());
         setBackground(new Color(30, 30, 40));
-        setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-        TopBar tb = new TopBar(window,"");
+        // Pasek górny z tytułem "Autorzy"
+        TopBar tb = new TopBar(window, "Autorzy");
         add(tb, BorderLayout.NORTH);
 
-        JLabel title = new JLabel("Autorzy", SwingConstants.CENTER);
-        title.setForeground(Color.WHITE);
-        title.setFont(new Font("Serif", Font.BOLD, 22));
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(title);
+        // Panel centralny z zawartością
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setOpaque(false); // Przezroczyste tło, by dziedziczyć kolor z AuthorsPanel
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(50, 20, 50, 20));
 
-        add(Box.createVerticalStrut(20));
+        // Nagłówek sekcji
+        JLabel headerLabel = new JLabel("Twórcy Gry");
+        headerLabel.setForeground(new Color(100, 150, 255)); // Lekki niebieski akcent
+        headerLabel.setFont(new Font("Serif", Font.BOLD, 32));
+        headerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        contentPanel.add(headerLabel);
 
-        addCenteredField("Przemysław Błaszczyk");
-        add(Box.createVerticalStrut(10));
+        contentPanel.add(Box.createVerticalStrut(40)); // Odstęp
 
-        addCenteredField("Mateusz Biskup");
-        add(Box.createVerticalStrut(10));
+        // Lista autorów
+        addAuthorLabel(contentPanel, "Przemysław Błaszczyk");
+        contentPanel.add(Box.createVerticalStrut(15));
 
+        addAuthorLabel(contentPanel, "Mateusz Biskup");
 
-        add(Box.createVerticalGlue());
+        // Wypychacz na dół, aby napisy były bliżej środka/góry
+        contentPanel.add(Box.createVerticalGlue());
+
+        add(contentPanel, BorderLayout.CENTER);
     }
 
-    private void addCenteredField(String text) {
-        JTextField tf = new JTextField(text);
-        tf.setMaximumSize(new Dimension(420, 36));
-        tf.setPreferredSize(new Dimension(420, 36));
-        tf.setAlignmentX(Component.CENTER_ALIGNMENT);
-        tf.setHorizontalAlignment(JTextField.CENTER);
-        tf.setEditable(false);
-        tf.setFont(new Font("Dialog", Font.PLAIN, 16));
-        tf.setBackground(new Color(50, 50, 60));
-        tf.setForeground(Color.WHITE);
-        tf.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(80, 80, 90)),
-                BorderFactory.createEmptyBorder(6, 10, 6, 10)
-        ));
-        add(tf);
+    private void addAuthorLabel(JPanel panel, String text) {
+        JLabel label = new JLabel(text);
+        label.setForeground(Color.WHITE);
+        // Użycie czcionki bezszeryfowej dla nazwisk wygląda nowocześniej
+        label.setFont(new Font("SansSerif", Font.PLAIN, 22));
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Opcjonalnie: Dodanie cienia tekstu (imitacja) lub ikony
+        // label.setIcon(new ImageIcon(...));
+
+        panel.add(label);
     }
 }

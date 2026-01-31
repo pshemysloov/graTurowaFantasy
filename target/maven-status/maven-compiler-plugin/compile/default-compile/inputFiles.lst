@@ -1,48 +1,50 @@
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\Actor.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\Attributes.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\CombatHandler.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\Effects\BleedEffect.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\Enemies\Zombie.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\Enemy.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\EquipmentHandler.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\GameLogger.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\Main.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\MusicPlayer.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\Player.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\PlayerLevelHandler.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\PVPCombatHandler.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\Skill.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\SkillRegister.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\Skills\Attack.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\Skills\BleedAttack.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\Skills\Heal.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\StatusEffect.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Core\TargetType.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\AfterLoginPanel.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\AppWindow.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\AuthorsPanel.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\CreateAccountPanel.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\DungeonPanel.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\EquipmentPanel.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\GameEndPanel.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\LoginPanel.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\MainMenuPanel.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\PlayerVSPlayerPanel.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\Scenes\TopBar.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\ClientConnection.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\ClientToServerHandler.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\DatabaseHandler.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Global.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\EquipmentInfo.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\EquipmentInfoResponse.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\GameFoundInfo.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\LoginInfo.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\LoginInfoResponse.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\LogoutInfo.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\RegisterInfo.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\RegisterResponse.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\StartGameInfo.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Packets\TurnInfo.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Server.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\ServerTerminal.java
-C:\Users\PB\Documents\Studia\Programowanie obiektowe 2 java\Projekt\GraTurowaFantasy\src\main\java\TCPServer\Session.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\Actor.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\Attributes.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\CombatHandler.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\Effects\BleedEffect.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\Enemies\Zombie.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\Enemy.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\EquipmentHandler.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\GameLogger.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\Main.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\MusicPlayer.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\Player.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\PlayerLevelHandler.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\PVPCombatHandler.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\Skill.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\SkillRegister.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\Skills\Attack.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\Skills\BleedAttack.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\Skills\Heal.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\Skills\HeavySmash.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\Skills\Meditation.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\StatusEffect.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Core\TargetType.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Scenes\AfterLoginPanel.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Scenes\AppWindow.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Scenes\AuthorsPanel.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Scenes\CreateAccountPanel.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Scenes\DungeonPanel.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Scenes\EquipmentPanel.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Scenes\GameEndPanel.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Scenes\LoginPanel.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Scenes\MainMenuPanel.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Scenes\PlayerVSPlayerPanel.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\Scenes\TopBar.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\ClientConnection.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\ClientToServerHandler.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\DatabaseHandler.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\Global.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\Packets\EquipmentInfo.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\Packets\EquipmentInfoResponse.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\Packets\GameFoundInfo.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\Packets\LoginInfo.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\Packets\LoginInfoResponse.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\Packets\LogoutInfo.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\Packets\RegisterInfo.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\Packets\RegisterResponse.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\Packets\StartGameInfo.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\Packets\TurnInfo.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\Server.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\ServerTerminal.java
+C:\Users\Dom\Desktop\lab9a\graTurowaFantasy-main\src\main\java\TCPServer\Session.java

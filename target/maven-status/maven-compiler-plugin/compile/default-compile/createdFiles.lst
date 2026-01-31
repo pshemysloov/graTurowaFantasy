@@ -1,3 +1,4 @@
+Core\Skills\HeavySmash.class
 Scenes\CreateAccountPanel.class
 Core\Enemies\Zombie.class
 Scenes\GameEndPanel.class
@@ -7,6 +8,7 @@ TCPServer\Packets\LoginInfoResponse.class
 TCPServer\Session.class
 Core\PlayerLevelHandler.class
 TCPServer\Server.class
+Core\Skills\Meditation.class
 Core\Skill.class
 Core\SkillRegister.class
 Core\Skills\Attack.class

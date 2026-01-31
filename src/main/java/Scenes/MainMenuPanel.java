@@ -7,7 +7,6 @@ public class MainMenuPanel extends JPanel {
     public MainMenuPanel(AppWindow window,
                          Runnable onLogin,
                          Runnable onCreateAccount,
-                         Runnable onOptions,
                          Runnable onAuthors,
                          Runnable onExit) {
 
@@ -20,13 +19,11 @@ public class MainMenuPanel extends JPanel {
 
         JButton btnLogin = createButton("Zaloguj się");
         JButton btnCreateAccount = createButton("Stwórz konto");
-        JButton btnOptions = createButton("Opcje");
         JButton btnAuthors = createButton("Autorzy");
         JButton btnExit = createButton("Wyjście");
 
         btnLogin.addActionListener(_ -> { if (onLogin != null) onLogin.run(); });
         btnCreateAccount.addActionListener(_ -> { if (onCreateAccount != null) onCreateAccount.run(); });
-        btnOptions.addActionListener(_ -> { if (onOptions != null) onOptions.run(); });
         btnAuthors.addActionListener(_ -> { if (onAuthors != null) onAuthors.run(); });
         btnExit.addActionListener(_ -> { if (onExit != null) onExit.run(); });
 
@@ -34,8 +31,6 @@ public class MainMenuPanel extends JPanel {
         center.add(btnLogin);
         center.add(Box.createVerticalStrut(12));
         center.add(btnCreateAccount);
-        center.add(Box.createVerticalStrut(12));
-        center.add(btnOptions);
         center.add(Box.createVerticalStrut(12));
         center.add(btnAuthors);
         center.add(Box.createVerticalStrut(12));

@@ -46,8 +46,6 @@ public class Main  {
                     this::onLoginClicked,
                     // onCreateAccount
                     this::onCreateAccount,
-                    // onOptions
-                    this::onOptionsClicked,
                     // onAuthors
                     this::onAuthorsClicked,
                     // onExit
