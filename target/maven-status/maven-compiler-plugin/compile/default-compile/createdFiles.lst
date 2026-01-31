@@ -17,6 +17,7 @@ Scenes\MainMenuPanel.class
 Scenes\AuthorsPanel.class
 Core\GameLogger.class
 TCPServer\Packets\TurnInfo.class
+TCPServer\Packets\StartGameInfo.class
 Scenes\LoginPanel.class
 TCPServer\Packets\EquipmentInfoResponse.class
 Core\Effects\BleedEffect.class
@@ -24,11 +25,13 @@ TCPServer\ServerTerminal.class
 TCPServer\ClientToServerHandler.class
 Core\Skills\Heal.class
 Core\Main.class
-TCPServer\Client.class
 TCPServer\Packets\RegisterInfo.class
+TCPServer\Packets\GameFoundInfo.class
 Core\Main$1.class
 Scenes\DungeonPanel.class
+Core\PVPCombatHandler.class
 Scenes\EquipmentPanel.class
+Core\PVPCombatHandler$1.class
 TCPServer\ClientConnection.class
 Core\MusicPlayer.class
 Core\Attributes.class
@@ -45,4 +48,4 @@ TCPServer\Packets\EquipmentInfo.class
 Scenes\AfterLoginPanel.class
 TCPServer\Packets\LoginInfo.class
 TCPServer\Packets\RegisterResponse.class
-TCPServer\Session$PlayerConnection.class
+Scenes\PlayerVSPlayerPanel.class

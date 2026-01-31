@@ -31,6 +31,7 @@ public abstract class Actor {
     public void resetStatus() {
         this.health = maxHealth;
         this.energy = maxEnergy;
+        this.activeEffects.clear();
     }
 
     public void applyEffect(StatusEffect effect) {

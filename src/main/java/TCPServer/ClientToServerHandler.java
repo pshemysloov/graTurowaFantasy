@@ -109,7 +109,24 @@ public class ClientToServerHandler {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
     }
+
+    public Socket connectForGame() throws IOException {
+        return new Socket(HOST, PORT);
+    }
+
+    // Method to send StartGameInfo
+    public void sendStartGameInfo(ObjectOutputStream oos, StartGameInfo info) throws IOException {
+        oos.writeObject(info);
+        oos.flush();
+    }
+
+    // Method to send TurnInfo
+    public void sendTurnInfo(ObjectOutputStream oos, TurnInfo info) throws IOException {
+        oos.writeObject(info);
+        oos.flush();
+    }
+
+
+
 }

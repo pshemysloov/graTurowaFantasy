@@ -221,7 +221,19 @@ public class Main  {
     }
 
     private void OnWalkaGraczClicked() {
-        JOptionPane.showMessageDialog(null, "Walka z graczem");
+        if (player != null) {
+            String sessionCode = JOptionPane.showInputDialog(window, "Podaj kod sesji (np. 1234):", "Kod Sesji", JOptionPane.PLAIN_MESSAGE);
+
+            if (sessionCode != null && !sessionCode.trim().isEmpty()) {
+                player.resetStatus();
+                PlayerVSPlayerPanel pvpPanel = new PlayerVSPlayerPanel(window, player, sessionCode.trim());
+                window.registerScene("pvp", pvpPanel);
+                window.showScene("pvp");
+                window.setVisible(true);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Player jest null");
+        }
     }
 
     private void OnWalkaKomputerClicked(){

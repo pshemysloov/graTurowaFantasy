@@ -3,30 +3,33 @@ package TCPServer.Packets;
 import java.io.Serializable;
 
 public class TurnInfo implements Serializable {
-    private final String nickname;
-    private final int a;
-    private final int b;
-    private final int c;
+    public int currentHealth;
+    public int maxHealth;
+    public int currentEnergy;
+    public int maxEnergy;
+    public int skillId;
 
-    public TurnInfo(String nickname, int a, int b, int c) {
-        this.nickname = nickname;
-        this.a = a;
-        this.b = b;
-        this.c = c;
-    }
+    // Attributes required for skill calculation
+    public int strength;
+    public int accuracy;
+    public int intelligence;
+    public int willpower;
+    public int constitution;
 
-    public String getNickname() { return nickname; }
-    public int getA() { return a; }
-    public int getB() { return b; }
-    public int getC() { return c; }
+    public String attackerName;
 
-    @Override
-    public String toString() {
-        return "TCPServer.Packets.packet_TurnInfo{" +
-                "nickname='" + nickname + '\'' +
-                ", a=" + a +
-                ", b=" + b +
-                ", c=" + c +
-                '}';
+    public TurnInfo(int currentHealth, int maxHealth, int currentEnergy, int maxEnergy, int skillId,
+                    int strength, int accuracy, int intelligence, int willpower, int constitution, String attackerName) {
+        this.currentHealth = currentHealth;
+        this.maxHealth = maxHealth;
+        this.currentEnergy = currentEnergy;
+        this.maxEnergy = maxEnergy;
+        this.skillId = skillId;
+        this.strength = strength;
+        this.accuracy = accuracy;
+        this.intelligence = intelligence;
+        this.willpower = willpower;
+        this.constitution = constitution;
+        this.attackerName = attackerName;
     }
 }
