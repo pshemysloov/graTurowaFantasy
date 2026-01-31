@@ -17,10 +17,6 @@ public class AfterLoginPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(new Color(30, 30, 40));
 
-        // Tytuł statyczny zamiast imienia gracza (aby nie wymagać obiektu Player)
-        TopBar tb = new TopBar(window, "Menu Główne");
-        add(tb, BorderLayout.NORTH);
-        tb.updateBackEnabled();
 
         JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));

@@ -27,6 +27,7 @@ TCPServer\Packets\EquipmentInfoResponse.class
 Core\Effects\BleedEffect.class
 Scenes\AfterLoginPanel$1.class
 TCPServer\ServerTerminal.class
+Scenes\LoginPanel$1.class
 TCPServer\ClientToServerHandler.class
 Core\Skills\Heal.class
 Core\Main.class
@@ -51,6 +52,7 @@ Core\Author.class
 Core\Enemy.class
 TCPServer\Global.class
 TCPServer\Packets\EquipmentInfo.class
+Scenes\CreateAccountPanel$1.class
 Scenes\AfterLoginPanel.class
 TCPServer\Packets\LoginInfo.class
 TCPServer\Packets\RegisterResponse.class
