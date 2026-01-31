@@ -9,5 +9,5 @@ if %ERRORLEVEL% NEQ 0 (
 )
 echo.
 echo === Uruchamianie ===
-java -jar target\server.jar
+java --enable-native-access=ALL-UNNAMED -jar target\server.jar
 pause

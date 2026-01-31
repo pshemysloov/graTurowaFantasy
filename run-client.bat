@@ -7,5 +7,5 @@ if not exist target\client.jar (
     pause
     exit /b 1
 )
-java -jar target\client.jar
+java --enable-native-access=ALL-UNNAMED -jar target\client.jar
 pause
