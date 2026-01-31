@@ -2,6 +2,7 @@ package Core;
 
 import java.util.ArrayList;
 
+@Author(name = "Mateusz Biskup")
 public abstract class Skill {
     public String name;
     public String description;

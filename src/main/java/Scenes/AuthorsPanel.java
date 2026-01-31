@@ -1,8 +1,11 @@
 package Scenes;
 
+import Core.Author;
+
 import javax.swing.*;
 import java.awt.*;
 
+@Author(name = "Mateusz Biskup")
 public class AuthorsPanel extends JPanel {
     public AuthorsPanel(AppWindow window) {
         // Używamy BorderLayout, aby TopBar był na górze, a treść w centrum

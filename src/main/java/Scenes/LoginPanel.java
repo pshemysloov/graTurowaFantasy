@@ -1,8 +1,11 @@
 package Scenes;
 
+import Core.Author;
+
 import javax.swing.*;
 import java.awt.*;
 
+@Author(name = "Mateusz Biskup")
 public class LoginPanel extends JPanel {
     private final AppWindow window;
     private final TopBar topBar;

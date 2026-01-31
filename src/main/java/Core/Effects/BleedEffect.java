@@ -1,10 +1,11 @@
 package Core.Effects;
 
 import Core.Actor;
+import Core.Author;
 import Core.GameLogger;
 import Core.StatusEffect;
 
-
+@Author(name = "Mateusz Biskup")
 public class BleedEffect extends StatusEffect {
     int multiplier;
 

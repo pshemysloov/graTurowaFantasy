@@ -1,11 +1,13 @@
 package Scenes;
 
+import Core.Author;
 import Core.Player;
 import Core.PlayerLevelHandler;
 
 import javax.swing.*;
 import java.awt.*;
 
+@Author(name = "Mateusz Biskup")
 public class GameEndPanel extends JPanel {
     private final AppWindow window;
     private final Player player;

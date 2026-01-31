@@ -1,9 +1,11 @@
 package TCPServer;
 
+import Core.Author;
 import TCPServer.Packets.TurnInfo;
 
 import java.io.IOException;
 
+@Author(name = "Przemysław Błaszczyk")
 public class Session implements Runnable {
     private final ClientConnection player1;
     private final ClientConnection player2;

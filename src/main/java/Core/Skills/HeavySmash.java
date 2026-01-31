@@ -1,6 +1,7 @@
 package Core.Skills;
 
 import Core.Actor;
+import Core.Author;
 import Core.Skill;
 import Core.TargetType;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
  * ale obarczony ryzykiem chybienia oraz wysokim kosztem energetycznym.
  * Demonstracja zaawansowanej logiki walki z wykorzystaniem atrybutów postaci (Accuracy).
  */
+@Author(name = "Mateusz Biskup")
 public class HeavySmash extends Skill {
 
     private HeavySmash() {

@@ -1,11 +1,13 @@
 package Core.Skills;
 
 import Core.Actor;
+import Core.Author;
 import Core.Skill;
 import Core.TargetType;
 import Core.Effects.BleedEffect;
 import java.util.ArrayList;
 
+@Author(name = "Mateusz Biskup")
 public class BleedAttack extends Skill {
 
     private BleedAttack() {

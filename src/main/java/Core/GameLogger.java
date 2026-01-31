@@ -2,6 +2,7 @@ package Core;
 
 import javax.swing.*;
 
+@Author(name = "Mateusz Biskup")
 public class GameLogger {
     private static JTextArea logArea;
 

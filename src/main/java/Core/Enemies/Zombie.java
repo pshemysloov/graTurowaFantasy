@@ -1,6 +1,7 @@
 package Core.Enemies;
 
 import Core.Actor;
+import Core.Author;
 import Core.Enemy;
 import Core.SkillRegister;
 
@@ -10,6 +11,7 @@ import java.util.ArrayList;
  * Klasa reprezentująca przeciwnika typu Zombie.
  * Posiada teraz ulepszony moduł decyzyjny (AI).
  */
+@Author(name = "Mateusz Biskup")
 public class Zombie extends Enemy {
 
     public Zombie() {

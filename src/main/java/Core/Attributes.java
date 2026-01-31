@@ -1,5 +1,6 @@
 package Core;
 
+@Author(name = "Mateusz Biskup")
 public class Attributes {
     public int strength;
     public int accuracy;

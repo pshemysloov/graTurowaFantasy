@@ -1,5 +1,6 @@
 package Core;
 
+@Author(name = "Przemysław Błaszczyk")
 public class EquipmentHandler {
     private final Player player;
 

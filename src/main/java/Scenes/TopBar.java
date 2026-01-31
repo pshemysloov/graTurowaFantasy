@@ -1,8 +1,11 @@
 package Scenes;
 
+import Core.Author;
+
 import javax.swing.*;
 import java.awt.*;
 
+@Author(name = "Mateusz Biskup")
 public class TopBar extends JPanel {
     private final JButton backButton;
     private final JLabel titleLabel;

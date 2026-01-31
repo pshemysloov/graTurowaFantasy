@@ -1,4 +1,5 @@
 package TCPServer;
+import Core.Author;
 import TCPServer.Packets.*;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Author(name = "Przemysław Błaszczyk")
 public class Server {
     private static final int PORT = Global.PORT;
     private DatabaseHandler dbHandler;

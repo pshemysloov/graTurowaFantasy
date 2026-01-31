@@ -4,12 +4,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import Core.Author;
 import TCPServer.Packets.*;
 import com.github.freva.asciitable.AsciiTable;
 import com.github.freva.asciitable.Column;
 import org.mindrot.jbcrypt.BCrypt;
 
-
+@Author(name = "Przemysław Błaszczyk")
 public class DatabaseHandler {
     private static final String url = "jdbc:sqlite:database.db";
     private Connection conn;

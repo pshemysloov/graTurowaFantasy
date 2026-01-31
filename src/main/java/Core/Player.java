@@ -1,6 +1,6 @@
 package Core;
 
-
+@Author(name = "Mateusz Biskup")
 public class Player extends Actor{
     public Skill[] skills = new Skill[4];
     public int level;

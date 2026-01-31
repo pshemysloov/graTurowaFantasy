@@ -1,9 +1,12 @@
 package TCPServer;
 
+import Core.Author;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+@Author(name = "Przemysław Błaszczyk")
 public class ClientConnection {
     public Socket socket;
     public ObjectOutputStream oos;

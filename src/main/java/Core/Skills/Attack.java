@@ -1,11 +1,13 @@
 package Core.Skills;
 
 import Core.Actor;
+import Core.Author;
 import Core.Skill;
 import Core.TargetType;
 
 import java.util.ArrayList;
 
+@Author(name = "Mateusz Biskup")
 public class Attack extends Skill {
 
     private Attack() {

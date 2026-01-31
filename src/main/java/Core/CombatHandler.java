@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+@Author(name = "Przemysław Błaszczyk")
 public class CombatHandler implements Runnable{
 
     ArrayList<Actor> actorsInCombat;

@@ -3,6 +3,7 @@ package Core;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+@Author(name = "Mateusz Biskup")
 public abstract class Actor {
     public String name;
     public int maxHealth;

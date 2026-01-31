@@ -1,7 +1,10 @@
 package TCPServer.Packets;
 
+import Core.Author;
+
 import java.io.Serializable;
 
+@Author(name = "Przemysław Błaszczyk")
 public class TurnInfo implements Serializable {
     public int currentHealth;
     public int maxHealth;

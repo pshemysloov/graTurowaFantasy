@@ -1,10 +1,12 @@
 package Scenes;
 
+import Core.Author;
 import TCPServer.Packets.LoginInfoResponse;
 
 import javax.swing.*;
 import java.awt.*;
 
+@Author(name = "Mateusz Biskup")
 public class AfterLoginPanel extends JPanel {
     private final AppWindow window;
     private final JButton btnWalkaKomputer = new JButton("Walka z komputerem");

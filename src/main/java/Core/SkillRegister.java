@@ -7,6 +7,7 @@ import Core.Skills.*;
  * Mapuje unikalne identyfikatory (ID) na instancje obiektów Skill.
  * Umożliwia łatwe ładowanie umiejętności z bazy danych oraz rozszerzanie gry o nowe ataki.
  */
+@Author(name = "Mateusz Biskup")
 public enum SkillRegister {
     ATTACK(0, Attack.getInstance()),
     HEAL(1, Heal.getInstance()),

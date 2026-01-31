@@ -1,12 +1,15 @@
 package TCPServer;
 
 
+import Core.Author;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+@Author(name = "Przemysław Błaszczyk")
 public class ServerTerminal implements Runnable{
     private final DatabaseHandler dbHandler;
 

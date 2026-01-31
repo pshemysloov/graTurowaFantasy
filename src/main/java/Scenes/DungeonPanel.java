@@ -9,6 +9,7 @@ import java.awt.*;
 import java.io.InputStream;
 import java.net.URL;
 
+@Author(name = "Mateusz Biskup")
 public class DungeonPanel extends JPanel {
     private final AppWindow window;
     private final JTextArea logArea;

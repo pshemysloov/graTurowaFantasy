@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+@Author(name = "Przemysław Błaszczyk")
 public class PVPCombatHandler implements Runnable {
 
     private final Player player;

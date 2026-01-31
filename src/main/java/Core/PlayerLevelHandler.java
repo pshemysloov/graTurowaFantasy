@@ -1,5 +1,6 @@
 package Core;
 
+@Author(name = "Mateusz Biskup")
 public class PlayerLevelHandler {
     private final Player player;
     public int expThreshold;

@@ -1,5 +1,6 @@
 package Core;
 
+@Author(name = "Mateusz Biskup")
 public abstract class StatusEffect {
     public String name;
     public int duration; // Liczba tur

@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
+@Author(name = "Mateusz Biskup, Przemysław Błaszczyk")
 public class Main  {
     static AppWindow window = new AppWindow();
     MainMenuPanel menu;

@@ -5,6 +5,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Author(name = "Mateusz Biskup")
 public class MusicPlayer {
     private Clip clip;
     private boolean isPlaying = false;

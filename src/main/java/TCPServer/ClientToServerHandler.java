@@ -1,5 +1,6 @@
 package TCPServer;
 
+import Core.Author;
 import Core.Player;
 import Core.SkillRegister;
 import TCPServer.Packets.*;
@@ -9,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+@Author(name = "Przemysław Błaszczyk")
 public class ClientToServerHandler {
     private static final String HOST = Global.HOST;
     private static final int PORT = Global.PORT;

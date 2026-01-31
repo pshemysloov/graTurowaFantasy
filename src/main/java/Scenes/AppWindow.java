@@ -1,10 +1,13 @@
 package Scenes;
 
+import Core.Author;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+@Author(name = "Mateusz Biskup")
 public class AppWindow extends JFrame {
     private final CardLayout cards = new CardLayout();
     private final Deque<String> history = new ArrayDeque<>();

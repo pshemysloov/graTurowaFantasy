@@ -1,6 +1,7 @@
 package Core.Skills;
 
 import Core.Actor;
+import Core.Author;
 import Core.Skill;
 import Core.TargetType;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
  * Jest to umiejętność wsparcia (Utility Skill), która pozwala graczowi
  * poświęcić turę na regenerację dużej ilości energii, zamiast zadawania obrażeń.
  */
+@Author(name = "Mateusz Biskup")
 public class Meditation extends Skill {
 
     private Meditation() {

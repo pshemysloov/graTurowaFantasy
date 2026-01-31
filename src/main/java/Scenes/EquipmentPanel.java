@@ -5,6 +5,7 @@ import Core.*;
 import javax.swing.*;
 import java.awt.*;
 
+@Author(name = "Mateusz Biskup")
 public class EquipmentPanel extends JPanel {
     private final AppWindow window;
     private final Player player;
