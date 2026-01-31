@@ -1,84 +1,106 @@
 package Scenes;
 
-import Core.Author;
-import TCPServer.Packets.LoginInfoResponse;
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-@Author(name = "Mateusz Biskup")
 public class AfterLoginPanel extends JPanel {
-    private final AppWindow window;
-    private final JButton btnWalkaKomputer = new JButton("Walka z komputerem");
-    private final JButton btnWalkaGracz = new JButton("Walka z graczem");
-    private final JButton btnEkwipunek = new JButton("Ekwipunek");
-    private final JButton btnWyjscie = new JButton("Wyjście");
 
-    private Runnable onWalkaKomputerClicked;
-    private Runnable onWalkaGraczClicked;
-    private Runnable onEkwipunekClicked;
-    private Runnable onWyjscieClicked;
+    // Usunięto argument 'Player player', aby pasował do Twojego Main.java
+    public AfterLoginPanel(AppWindow window,
+                           Runnable onEnterDungeon,
+                           Runnable onEnterPVP,
+                           Runnable onEquipment,
+                           Runnable onLogout) {
+
+        setLayout(new BorderLayout());
+        setBackground(new Color(30, 30, 40));
+
+        // Tytuł statyczny zamiast imienia gracza (aby nie wymagać obiektu Player)
+        TopBar tb = new TopBar(window, "Menu Główne");
+        add(tb, BorderLayout.NORTH);
+        tb.updateBackEnabled();
+
+        JPanel center = new JPanel();
+        center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+        center.setOpaque(false);
+        center.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+
+        // Nagłówek
+        JLabel header = new JLabel("Wybierz tryb gry");
+        header.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        header.setForeground(new Color(200, 200, 220));
+        header.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        center.add(header);
+        center.add(Box.createVerticalStrut(40));
+
+        // Przyciski
+        JButton btnDungeon = createStyledButton("Lochy (PvE)");
+        JButton btnPvp = createStyledButton("Arena (PvP)");
+        JButton btnEquipment = createStyledButton("Ekwipunek");
+        JButton btnLogout = createStyledButton("Wyloguj");
+
+        // Wyróżnienie przycisku wylogowania
+        btnLogout.setBackground(new Color(100, 50, 50));
+        btnLogout.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnLogout.setBackground(new Color(130, 60, 60));
+                btnLogout.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnLogout.setBackground(new Color(100, 50, 50));
+            }
+        });
 
 
-    public AfterLoginPanel(AppWindow window, Runnable onWalkaKomputerClicked, Runnable onWalkaGraczClicked, Runnable onEkwipunekClicked, Runnable onWyjscieClicked) {
-        this.window = window;
+        btnDungeon.addActionListener(_ -> { if (onEnterDungeon != null) onEnterDungeon.run(); });
+        btnPvp.addActionListener(_ -> { if (onEnterPVP != null) onEnterPVP.run(); });
+        btnEquipment.addActionListener(_ -> { if (onEquipment != null) onEquipment.run(); });
+        btnLogout.addActionListener(_ -> { if (onLogout != null) onLogout.run(); });
 
-        this.onWalkaKomputerClicked = onWalkaKomputerClicked;
-        this.onWalkaGraczClicked = onWalkaGraczClicked;
-        this.onEkwipunekClicked = onEkwipunekClicked;
-        this.onWyjscieClicked = onWyjscieClicked;
+        center.add(btnDungeon);
+        center.add(Box.createVerticalStrut(20));
+        center.add(btnPvp);
+        center.add(Box.createVerticalStrut(20));
+        center.add(btnEquipment);
+        center.add(Box.createVerticalStrut(40));
+        center.add(btnLogout);
+        center.add(Box.createVerticalGlue());
 
-
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
-
-        add(Box.createVerticalGlue());
-
-        btnWalkaKomputer.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnWalkaKomputer.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        btnWalkaKomputer.addActionListener(e -> handleWalkaKomputer());
-        add(btnWalkaKomputer);
-        add(Box.createRigidArea(new Dimension(0, 8)));
-
-        btnWalkaGracz.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnWalkaGracz.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        btnWalkaGracz.addActionListener(e -> handleWalkaGracz());
-        add(btnWalkaGracz);
-        add(Box.createRigidArea(new Dimension(0, 8)));
-
-        btnEkwipunek.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnEkwipunek.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        btnEkwipunek.addActionListener(e -> handleEkwipunek());
-        add(btnEkwipunek);
-        add(Box.createRigidArea(new Dimension(0, 8)));
-
-        btnWyjscie.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnWyjscie.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        btnWyjscie.addActionListener(e -> handleWyjscie());
-        add(btnWyjscie);
-
-        add(Box.createVerticalGlue());
+        add(center, BorderLayout.CENTER);
     }
 
-    private void handleWyjscie() {
+    private JButton createStyledButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        btn.setForeground(Color.WHITE);
+        btn.setBackground(new Color(60, 60, 75));
+        btn.setFocusPainted(false);
+        btn.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(40, 40, 50), 1),
+                BorderFactory.createEmptyBorder(12, 40, 12, 40)
+        ));
+        btn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btn.setMaximumSize(new Dimension(300, 50));
 
-        onWyjscieClicked.run();
+        if (!text.equals("Wyloguj")) {
+            btn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    btn.setBackground(new Color(80, 80, 100));
+                    btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    btn.setBackground(new Color(60, 60, 75));
+                }
+            });
+        }
+        return btn;
     }
-
-    private void handleEkwipunek() {
-
-        onEkwipunekClicked.run();
-    }
-
-    private void handleWalkaGracz() {
-
-        onWalkaGraczClicked.run();
-    }
-
-    private void handleWalkaKomputer() {
-
-        onWalkaKomputerClicked.run();
-    }
-
-
 }

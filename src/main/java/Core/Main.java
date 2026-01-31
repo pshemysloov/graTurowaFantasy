@@ -11,7 +11,6 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@Author(name = "Mateusz Biskup, Przemysław Błaszczyk")
 public class Main  {
     static AppWindow window = new AppWindow();
     MainMenuPanel menu;
@@ -47,7 +46,7 @@ public class Main  {
                     this::onLoginClicked,
                     // onCreateAccount
                     this::onCreateAccount,
-                    // onAuthors
+                    // onAuthors (UWAGA: Usunięto onOptions, zgodnie z nowym MainMenuPanel)
                     this::onAuthorsClicked,
                     // onExit
                     this::onExitClicked
@@ -65,20 +64,6 @@ public class Main  {
             window.registerScene("login",login);
             window.showScene("login");
             window.setVisible(true);
-
-//            String nick = JOptionPane.showInputDialog(null, "Podaj nick:", "Logowanie", JOptionPane.PLAIN_MESSAGE);
-//            if (nick != null && !nick.trim().isEmpty()) {
-//                JOptionPane.showMessageDialog(null, "Zalogowano jako: " + nick, "OK", JOptionPane.INFORMATION_MESSAGE);
-//
-
-
-                // po zalogowaniu otwórz Dungeon
-                //Player player = new Player(nick, 150, 100, 0, 0, 10, 10, 10, 10, 10, 10, 1, 2);
-                //DungeonPanel dungeon = new DungeonPanel(player);
-                //window.registerScene("dungeon",dungeon);
-                //window.showScene("dungeon");
-                //window.setVisible(true);
-//            }
         });
     }
 
@@ -91,11 +76,7 @@ public class Main  {
         });
     }
 
-    private void onOptionsClicked() {
-        SwingUtilities.invokeLater(() ->
-                JOptionPane.showMessageDialog(null, "Brak opcji do ustawienia.", "Opcje", JOptionPane.INFORMATION_MESSAGE)
-        );
-    }
+    // Metoda onOptionsClicked usunięta, ponieważ przycisk Opcje nie istnieje
 
     private void onAuthorsClicked() {
         SwingUtilities.invokeLater(() -> {
@@ -156,17 +137,22 @@ public class Main  {
             }
 
             else {
-                //JOptionPane.showMessageDialog(null,response.message);
-
+                // Utworzenie gracza na podstawie danych z serwera
                 player = createPlayerFromServerData(response);
 
-                afterLogin = new AfterLoginPanel(window, this::OnWalkaKomputerClicked, this::OnWalkaGraczClicked, this::OnEkwipunekClicked, this::onWyjscieClicked);
+
+                afterLogin = new AfterLoginPanel(
+                        window,
+                        this::OnWalkaKomputerClicked,
+                        this::OnWalkaGraczClicked,
+                        this::OnEkwipunekClicked,
+                        this::onWyjscieClicked
+                );
+
                 window.registerScene("afterlogin",afterLogin);
                 window.showScene("afterlogin");
                 window.setVisible(true);
-
             }
-
         });
     }
 
@@ -179,7 +165,7 @@ public class Main  {
                 try {
                     stats.add(Integer.parseInt(part.trim()));
                 } catch (NumberFormatException e) {
-                    // Ignoruj części, które nie są liczbami, jeśli message zawiera też tekst
+                    // Ignoruj części, które nie są liczbami
                 }
             }
         }
@@ -205,8 +191,6 @@ public class Main  {
                 stats.get(10), // experience
                 stats.get(11) // attribute points
         );
-
-
     }
 
     private void OnEkwipunekClicked() {
@@ -236,7 +220,6 @@ public class Main  {
     }
 
     private void OnWalkaKomputerClicked(){
-        //JOptionPane.showMessageDialog(null, "Walka z komputerem");
         if (player != null) {
             player.resetStatus();
             dungeon = new DungeonPanel(window, player, this::synchronizePlayerDataWithServer);
@@ -246,9 +229,6 @@ public class Main  {
         } else {
             JOptionPane.showMessageDialog(null, "Player jest null");
         }
-
-
-
     }
 
     private void onWyjscieClicked(){
@@ -285,5 +265,4 @@ public class Main  {
             System.out.println("Zsynchronizowano dane z serwerem");
         }
     }
-
 }

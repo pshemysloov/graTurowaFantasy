@@ -10,6 +10,7 @@ Core\PlayerLevelHandler.class
 TCPServer\Server.class
 Core\Skills\Meditation.class
 Core\Skill.class
+Scenes\AfterLoginPanel$2.class
 Core\SkillRegister.class
 Core\Skills\Attack.class
 Core\Skills\BleedAttack.class
@@ -21,8 +22,10 @@ Core\GameLogger.class
 TCPServer\Packets\TurnInfo.class
 TCPServer\Packets\StartGameInfo.class
 Scenes\LoginPanel.class
+Scenes\MainMenuPanel$1.class
 TCPServer\Packets\EquipmentInfoResponse.class
 Core\Effects\BleedEffect.class
+Scenes\AfterLoginPanel$1.class
 TCPServer\ServerTerminal.class
 TCPServer\ClientToServerHandler.class
 Core\Skills\Heal.class
@@ -44,6 +47,7 @@ Core\Actor.class
 Scenes\AppWindow.class
 TCPServer\Packets\LogoutInfo.class
 Core\StatusEffect.class
+Core\Author.class
 Core\Enemy.class
 TCPServer\Global.class
 TCPServer\Packets\EquipmentInfo.class

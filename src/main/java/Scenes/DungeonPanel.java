@@ -9,7 +9,6 @@ import java.awt.*;
 import java.io.InputStream;
 import java.net.URL;
 
-@Author(name = "Mateusz Biskup")
 public class DungeonPanel extends JPanel {
     private final AppWindow window;
     private final JTextArea logArea;
@@ -26,17 +25,12 @@ public class DungeonPanel extends JPanel {
     private final Runnable onBattleEndFinished;
     private Image backgroundImage;
 
-    /**
-     * Inicjalizuje panel lochów, ładuje zasoby graficzne i muzyczne oraz ustawia układ interfejsu.
-     * Rozpoczyna również wątek obsługujący logikę walki.
-     */
     public DungeonPanel(AppWindow window, Player player, Runnable onBattleEndFinished) {
         this.window = window;
         this.player = player;
         this.onBattleEndFinished = onBattleEndFinished;
         this.startTime = System.currentTimeMillis();
 
-        // Ładowanie obrazu tła z zasobów
         try {
             URL bgUrl = getClass().getResource("/background.gif");
             if (bgUrl != null) {
@@ -51,7 +45,7 @@ public class DungeonPanel extends JPanel {
 
         setLayout(new BorderLayout(10, 10));
 
-        // Konfiguracja górnego panelu z przyciskami systemowymi
+        // --- GÓRA ---
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         topPanel.setOpaque(false);
 
@@ -74,22 +68,22 @@ public class DungeonPanel extends JPanel {
         add(topPanel, BorderLayout.NORTH);
 
 
-        // Konfiguracja głównego panelu walki
+        // --- ŚRODEK ---
         JPanel battlePanel = new JPanel(new GridLayout(1, 2, 20, 10));
         battlePanel.setOpaque(false);
         battlePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Panel lewy: Wyświetlanie przeciwników
+        // Lewa strona
         leftPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         leftPanel.setOpaque(false);
         leftPanel.setBorder(createTitledBorder("Przeciwnicy"));
 
-        // Panel prawy: Statystyki gracza i umiejętności
+        // Prawa strona
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setOpaque(false);
         rightPanel.setBorder(createTitledBorder("Gracz: " + player.name));
 
-        // Panel statystyk (HP i Energia)
+        // Statystyki
         JPanel statsPanel = new JPanel();
         statsPanel.setLayout(new BoxLayout(statsPanel, BoxLayout.Y_AXIS));
         statsPanel.setOpaque(false);
@@ -126,7 +120,7 @@ public class DungeonPanel extends JPanel {
         rightPanel.add(statsPanel);
         rightPanel.add(Box.createVerticalStrut(20));
 
-        // Panel umiejętności gracza
+        // --- PRZYCISKI UMIEJĘTNOŚCI (WERSJA PROSTA) ---
         JPanel skillsContainer = new JPanel(new GridLayout(0, 1, 5, 5));
         skillsContainer.setOpaque(false);
         skillsContainer.setMaximumSize(new Dimension(300, 200));
@@ -134,6 +128,7 @@ public class DungeonPanel extends JPanel {
         for (Skill skill : player.skills) {
             if (skill != null) {
                 JButton skillBtn = createStyledButton(skill.name);
+                // Prosty tooltip z kosztem energii
                 skillBtn.setToolTipText("Koszt: " + skill.energyCost + " Energii");
                 skillBtn.addActionListener(_ -> player.setSelectedSkill(skill));
                 skillsContainer.add(skillBtn);
@@ -146,7 +141,7 @@ public class DungeonPanel extends JPanel {
         add(battlePanel, BorderLayout.CENTER);
 
 
-        // Konfiguracja panelu logów (dziennik walki)
+        // --- DÓŁ (LOGI) ---
         JPanel logPanel = new JPanel(new BorderLayout());
         logPanel.setOpaque(false);
         logPanel.setPreferredSize(new Dimension(0, 180));
@@ -171,7 +166,6 @@ public class DungeonPanel extends JPanel {
         GameLogger.setLogArea(logArea);
         GameLogger.log("=== Witaj w Lochach! ===");
 
-        // Inicjalizacja logiki walki
         combatHandler = new CombatHandler();
         combatHandler.setDungeonPanel(this);
         combatHandler.addActor(player);
@@ -184,9 +178,6 @@ public class DungeonPanel extends JPanel {
         combatThread.start();
     }
 
-    /**
-     * Rysuje niestandardowe tło dla panelu.
-     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -195,9 +186,6 @@ public class DungeonPanel extends JPanel {
         }
     }
 
-    /**
-     * Tworzy stylizowane obramowanie z tytułem dla paneli interfejsu.
-     */
     private TitledBorder createTitledBorder(String title) {
         TitledBorder border = BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(new Color(100, 100, 120), 2),
@@ -209,9 +197,6 @@ public class DungeonPanel extends JPanel {
         return border;
     }
 
-    /**
-     * Tworzy przycisk o spójnym stylu graficznym dla aplikacji.
-     */
     private JButton createStyledButton(String text) {
         JButton btn = new JButton(text);
         btn.setFocusable(false);
@@ -225,12 +210,7 @@ public class DungeonPanel extends JPanel {
         return btn;
     }
 
-    /**
-     * Aktualizuje interfejs użytkownika, odświeżając stan pasków statystyk gracza
-     * oraz listę i stan zdrowia przeciwników.
-     */
     public void refreshEnemies() {
-        // Aktualizacja pasków HP i Energii gracza
         for (Actor actor : combatHandler.getActorsInCombat()) {
             if (actor instanceof Player) {
                 hpBar.setMaximum(actor.maxHealth);
@@ -244,7 +224,6 @@ public class DungeonPanel extends JPanel {
             }
         }
 
-        // Aktualizacja listy przeciwników
         leftPanel.removeAll();
         for (Actor actor : combatHandler.getActorsInCombat()) {
             if (actor instanceof Enemy) {
@@ -262,7 +241,6 @@ public class DungeonPanel extends JPanel {
                 enemyBtn.setFocusable(false);
 
                 enemyBtn.addActionListener(_ -> {
-                    // Wybór celu ataku przez gracza
                     for(Actor a : combatHandler.getActorsInCombat()) {
                         if(a instanceof Player) {
                             ((Player)a).setSelectedTarget(e);
@@ -279,7 +257,7 @@ public class DungeonPanel extends JPanel {
                         enemyBtn.setVerticalTextPosition(SwingConstants.BOTTOM);
                         enemyBtn.setHorizontalTextPosition(SwingConstants.CENTER);
                     } catch (Exception ex) {
-                        System.err.println("Błąd ładowania grafiki przeciwnika: " + e.spritePath);
+                        // ignore
                     }
                 }
 
@@ -302,9 +280,6 @@ public class DungeonPanel extends JPanel {
         leftPanel.repaint();
     }
 
-    /**
-     * Wczytuje i odtwarza muzykę tła.
-     */
     private void loadMusic(MusicPlayer mp) {
         InputStream musicStream = Main.class.getResourceAsStream("/music.wav");
         if (musicStream != null) {
@@ -313,10 +288,6 @@ public class DungeonPanel extends JPanel {
         }
     }
 
-    /**
-     * Obsługuje zakończenie walki, zatrzymuje logikę gry, przyznaje doświadczenie
-     * i przełącza widok na ekran podsumowania.
-     */
     public void handleBattleEnd(boolean victory) {
         int experience = 0;
         int enemiesDefeated = 0;

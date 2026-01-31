@@ -9,7 +9,6 @@ import java.awt.*;
 import java.io.InputStream;
 import java.net.URL;
 
-@Author(name = "Mateusz Biskup")
 public class PlayerVSPlayerPanel extends JPanel {
     private final AppWindow window;
     private final JTextArea logArea;
@@ -25,16 +24,11 @@ public class PlayerVSPlayerPanel extends JPanel {
     private final long startTime;
     private Image backgroundImage;
 
-    /**
-     * Inicjalizuje panel walki PVP, nawiązuje połączenie sieciowe poprzez CombatHandlera
-     * i ustawia elementy interfejsu graficznego.
-     */
     public PlayerVSPlayerPanel(AppWindow window, Player player, String sessionCode) {
         this.window = window;
         this.player = player;
         this.startTime = System.currentTimeMillis();
 
-        // Ładowanie tła
         try {
             URL bgUrl = getClass().getResource("/background.gif");
             if (bgUrl != null) {
@@ -49,7 +43,7 @@ public class PlayerVSPlayerPanel extends JPanel {
 
         setLayout(new BorderLayout(10, 10));
 
-        // Konfiguracja panelu górnego
+        // --- GÓRA ---
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         topPanel.setOpaque(false);
 
@@ -72,22 +66,22 @@ public class PlayerVSPlayerPanel extends JPanel {
         add(topPanel, BorderLayout.NORTH);
 
 
-        // Konfiguracja panelu środkowego (pole bitwy)
+        // --- ŚRODEK ---
         JPanel battlePanel = new JPanel(new GridLayout(1, 2, 20, 10));
         battlePanel.setOpaque(false);
         battlePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Panel lewy: Przeciwnik sieciowy
+        // Przeciwnik
         leftPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         leftPanel.setOpaque(false);
         leftPanel.setBorder(createTitledBorder("Przeciwnik"));
 
-        // Panel prawy: Statystyki lokalnego gracza
+        // Gracz
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setOpaque(false);
         rightPanel.setBorder(createTitledBorder("Gracz: " + player.name));
 
-        // Panel statystyk
+        // Statystyki
         JPanel statsPanel = new JPanel();
         statsPanel.setLayout(new BoxLayout(statsPanel, BoxLayout.Y_AXIS));
         statsPanel.setOpaque(false);
@@ -124,7 +118,7 @@ public class PlayerVSPlayerPanel extends JPanel {
         rightPanel.add(statsPanel);
         rightPanel.add(Box.createVerticalStrut(20));
 
-        // Panel umiejętności
+        // --- PRZYCISKI UMIEJĘTNOŚCI (WERSJA PROSTA) ---
         JPanel skillsContainer = new JPanel(new GridLayout(0, 1, 5, 5));
         skillsContainer.setOpaque(false);
         skillsContainer.setMaximumSize(new Dimension(300, 200));
@@ -132,6 +126,7 @@ public class PlayerVSPlayerPanel extends JPanel {
         for (Skill skill : player.skills) {
             if (skill != null) {
                 JButton skillBtn = createStyledButton(skill.name);
+                // Prosty tooltip z kosztem energii
                 skillBtn.setToolTipText("Koszt: " + skill.energyCost);
                 skillBtn.addActionListener(_ -> player.setSelectedSkill(skill));
                 skillsContainer.add(skillBtn);
@@ -144,7 +139,7 @@ public class PlayerVSPlayerPanel extends JPanel {
         add(battlePanel, BorderLayout.CENTER);
 
 
-        // Panel logów
+        // --- LOGI ---
         JPanel logPanel = new JPanel(new BorderLayout());
         logPanel.setOpaque(false);
         logPanel.setPreferredSize(new Dimension(0, 180));
@@ -170,7 +165,6 @@ public class PlayerVSPlayerPanel extends JPanel {
         GameLogger.log("=== TRYB PVP ===");
         GameLogger.log("Kod sesji: " + sessionCode);
 
-        // Uruchomienie obsługi sieciowej
         combatHandler = new PVPCombatHandler(player, sessionCode);
         combatHandler.setPvpPanel(this);
 
@@ -180,9 +174,6 @@ public class PlayerVSPlayerPanel extends JPanel {
         combatThread.start();
     }
 
-    /**
-     * Rysuje obraz tła na panelu.
-     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -191,9 +182,6 @@ public class PlayerVSPlayerPanel extends JPanel {
         }
     }
 
-    /**
-     * Tworzy spersonalizowane obramowanie z tytułem.
-     */
     private TitledBorder createTitledBorder(String title) {
         TitledBorder border = BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(new Color(100, 100, 120), 2),
@@ -205,9 +193,6 @@ public class PlayerVSPlayerPanel extends JPanel {
         return border;
     }
 
-    /**
-     * Tworzy przycisk zdefiniowany w stylu graficznym aplikacji.
-     */
     private JButton createStyledButton(String text) {
         JButton btn = new JButton(text);
         btn.setFocusable(false);
@@ -221,11 +206,7 @@ public class PlayerVSPlayerPanel extends JPanel {
         return btn;
     }
 
-    /**
-     * Synchronizuje widok z aktualnym stanem obiektów walczących (HP, energia, nazwy).
-     */
     public void refreshEnemies() {
-        // Aktualizacja statystyk lokalnego gracza
         for (Actor actor : combatHandler.getActorsInCombat()) {
             if (actor instanceof Player) {
                 hpBar.setMaximum(actor.maxHealth);
@@ -239,7 +220,6 @@ public class PlayerVSPlayerPanel extends JPanel {
             }
         }
 
-        // Aktualizacja widoku przeciwnika
         leftPanel.removeAll();
         for (Actor actor : combatHandler.getActorsInCombat()) {
             if (actor != player) {
@@ -292,9 +272,6 @@ public class PlayerVSPlayerPanel extends JPanel {
         leftPanel.repaint();
     }
 
-    /**
-     * Wczytuje plik dźwiękowy z zasobów.
-     */
     private void loadMusic(MusicPlayer mp) {
         InputStream musicStream = Main.class.getResourceAsStream("/music.wav");
         if (musicStream != null) {
@@ -303,9 +280,6 @@ public class PlayerVSPlayerPanel extends JPanel {
         }
     }
 
-    /**
-     * Kończy rozgrywkę PVP, rozłącza sesję sieciową i wyświetla ekran końcowy.
-     */
     public void handleBattleEnd(boolean victory) {
         long endTime = System.currentTimeMillis();
         long durationSeconds = (endTime - startTime) / 1000;
